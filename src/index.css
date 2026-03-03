@@ -91,7 +91,7 @@ body {
   inset: 0;
   z-index: 0;
 }
-.hero-canvas canvas { display: block; }
+.hero-canvas canvas { display: block; pointer-events: auto; }
 
 /* ── Section ── */
 section { position: relative; }

@@ -1,30 +1,14 @@
 import { useEffect, useRef, useCallback } from 'react'
 
 /**
- * GPU-accelerated floating particle grid drawn on a full-screen <canvas>.
- * Uses requestAnimationFrame + translate3d-style math for silky 60 fps.
- * Particles connect with proximity lines — like a neural mesh overlay.
+ * GPU Chip Schematic — Animated silicon die visualization.
+ * Shows a stylized GPU with processing cores, memory buses,
+ * and data flowing through pathways. Pure canvas, 60fps.
  */
-export default function GPUParticles({ count = 45, color = [124, 58, 237] }) {
+export default function GPUChipViz() {
     const canvasRef = useRef(null)
     const raf = useRef(null)
-    const particles = useRef([])
     const mouse = useRef({ x: -9999, y: -9999 })
-
-    const init = useCallback((W, H) => {
-        const pts = []
-        for (let i = 0; i < count; i++) {
-            pts.push({
-                x: Math.random() * W,
-                y: Math.random() * H,
-                vx: (Math.random() - 0.5) * 0.3,
-                vy: (Math.random() - 0.5) * 0.3,
-                r: 1.2 + Math.random() * 1.5,
-                baseAlpha: 0.15 + Math.random() * 0.25,
-            })
-        }
-        particles.current = pts
-    }, [count])
 
     const draw = useCallback(() => {
         const canvas = canvasRef.current
@@ -32,77 +16,211 @@ export default function GPUParticles({ count = 45, color = [124, 58, 237] }) {
         const ctx = canvas.getContext('2d')
         const W = canvas.width
         const H = canvas.height
-        const pts = particles.current
+        const t = Date.now() * 0.001
         const mx = mouse.current.x
         const my = mouse.current.y
 
         ctx.clearRect(0, 0, W, H)
 
-        // Update positions
-        for (const p of pts) {
-            p.x += p.vx
-            p.y += p.vy
+        // ── GPU Die Grid ── centered on screen
+        const chipW = Math.min(W * 0.55, 500)
+        const chipH = chipW * 0.75
+        const cx = W / 2
+        const cy = H / 2
+        const left = cx - chipW / 2
+        const top = cy - chipH / 2
 
-            // Bounce off edges
-            if (p.x < 0 || p.x > W) p.vx *= -1
-            if (p.y < 0 || p.y > H) p.vy *= -1
+        // Die outline
+        ctx.strokeStyle = 'rgba(124, 58, 237, 0.08)'
+        ctx.lineWidth = 1
+        ctx.strokeRect(left, top, chipW, chipH)
 
-            // Mouse repulsion
-            const dx = p.x - mx
-            const dy = p.y - my
-            const dist = Math.sqrt(dx * dx + dy * dy)
-            if (dist < 150) {
-                const force = (150 - dist) / 150 * 0.02
-                p.vx += dx * force
-                p.vy += dy * force
-            }
+        // Inner die area
+        const pad = 20
+        const il = left + pad, it = top + pad
+        const iw = chipW - pad * 2, ih = chipH - pad * 2
 
-            // Clamp velocity
-            const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy)
-            if (speed > 1) {
-                p.vx = (p.vx / speed) * 1
-                p.vy = (p.vy / speed) * 1
-            }
-        }
+        ctx.strokeStyle = 'rgba(124, 58, 237, 0.05)'
+        ctx.strokeRect(il, it, iw, ih)
 
-        // Draw connections
-        const CONNECT = 160
-        for (let i = 0; i < pts.length; i++) {
-            for (let j = i + 1; j < pts.length; j++) {
-                const dx = pts[i].x - pts[j].x
-                const dy = pts[i].y - pts[j].y
-                const d = Math.sqrt(dx * dx + dy * dy)
-                if (d < CONNECT) {
-                    const alpha = (1 - d / CONNECT) * 0.12
-                    ctx.beginPath()
-                    ctx.moveTo(pts[i].x, pts[i].y)
-                    ctx.lineTo(pts[j].x, pts[j].y)
-                    ctx.strokeStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`
-                    ctx.lineWidth = 0.6
-                    ctx.stroke()
+        // ── Processing cores grid ──
+        const cols = 8, rows = 6
+        const cellW = iw / cols
+        const cellH = ih / rows
+
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const x = il + c * cellW
+                const y = it + r * cellH
+
+                // Distance from mouse for interactivity
+                const cmx = x + cellW / 2
+                const cmy = y + cellH / 2
+                const dist = Math.sqrt((cmx - mx) ** 2 + (cmy - my) ** 2)
+                const hover = Math.max(0, 1 - dist / 200)
+
+                // Staggered activation wave
+                const wave = Math.sin(t * 1.5 + c * 0.4 + r * 0.3) * 0.5 + 0.5
+                const active = wave * 0.3 + hover * 0.5
+
+                // Core cell
+                const inset = 2
+                ctx.fillStyle = `rgba(124, 58, 237, ${0.02 + active * 0.08})`
+                ctx.fillRect(x + inset, y + inset, cellW - inset * 2, cellH - inset * 2)
+
+                ctx.strokeStyle = `rgba(124, 58, 237, ${0.04 + active * 0.12})`
+                ctx.lineWidth = 0.5
+                ctx.strokeRect(x + inset, y + inset, cellW - inset * 2, cellH - inset * 2)
+
+                // Active core glow
+                if (active > 0.15) {
+                    const g = ctx.createRadialGradient(cmx, cmy, 0, cmx, cmy, cellW * 0.7)
+                    g.addColorStop(0, `rgba(167, 139, 250, ${active * 0.12})`)
+                    g.addColorStop(1, 'rgba(167, 139, 250, 0)')
+                    ctx.fillStyle = g
+                    ctx.fillRect(x, y, cellW, cellH)
+                }
+
+                // Tiny "transistor" dots in active cores
+                if (active > 0.3) {
+                    const dotCount = 4
+                    for (let d = 0; d < dotCount; d++) {
+                        const dx = x + inset + 4 + ((cellW - inset * 2 - 8) / (dotCount - 1)) * d
+                        const dy = cmy
+                        ctx.beginPath()
+                        ctx.arc(dx, dy, 1.2, 0, Math.PI * 2)
+                        ctx.fillStyle = `rgba(196, 132, 252, ${active * 0.6})`
+                        ctx.fill()
+                    }
                 }
             }
         }
 
-        // Draw particles
-        for (const p of pts) {
+        // ── Data bus lines ── (horizontal + vertical pathways)
+        const busAlpha = 0.06
+        // Horizontal buses
+        for (let r = 1; r < rows; r++) {
+            const y = it + r * cellH
             ctx.beginPath()
-            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-            ctx.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${p.baseAlpha})`
-            ctx.fill()
+            ctx.moveTo(il, y)
+            ctx.lineTo(il + iw, y)
+            ctx.strokeStyle = `rgba(124, 58, 237, ${busAlpha})`
+            ctx.lineWidth = 0.5
+            ctx.stroke()
+        }
+        // Vertical buses
+        for (let c = 1; c < cols; c++) {
+            const x = il + c * cellW
+            ctx.beginPath()
+            ctx.moveTo(x, it)
+            ctx.lineTo(x, it + ih)
+            ctx.strokeStyle = `rgba(124, 58, 237, ${busAlpha})`
+            ctx.lineWidth = 0.5
+            ctx.stroke()
+        }
 
-            // Subtle glow
-            const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4)
-            g.addColorStop(0, `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${p.baseAlpha * 0.3})`)
-            g.addColorStop(1, `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0)`)
+        // ── Data packets flowing through buses ──
+        const packetCount = 18
+        for (let i = 0; i < packetCount; i++) {
+            const isHoriz = i % 2 === 0
+            const speed = 0.3 + (i * 0.17) % 0.6
+            const offset = ((t * speed + i * 137.5) % 1)
+
+            if (isHoriz) {
+                const row = (i * 7) % rows
+                const y = it + (row + 0.5) * cellH
+                const x = il + offset * iw
+                const len = 15 + Math.sin(t + i) * 8
+
+                const grad = ctx.createLinearGradient(x - len, y, x + len, y)
+                grad.addColorStop(0, 'rgba(196, 132, 252, 0)')
+                grad.addColorStop(0.5, `rgba(196, 132, 252, ${0.3 + Math.sin(t * 2 + i) * 0.15})`)
+                grad.addColorStop(1, 'rgba(196, 132, 252, 0)')
+                ctx.beginPath()
+                ctx.moveTo(x - len, y)
+                ctx.lineTo(x + len, y)
+                ctx.strokeStyle = grad
+                ctx.lineWidth = 1.5
+                ctx.stroke()
+            } else {
+                const col = (i * 5) % cols
+                const x = il + (col + 0.5) * cellW
+                const y = it + offset * ih
+                const len = 15 + Math.cos(t + i) * 8
+
+                const grad = ctx.createLinearGradient(x, y - len, x, y + len)
+                grad.addColorStop(0, 'rgba(129, 140, 248, 0)')
+                grad.addColorStop(0.5, `rgba(129, 140, 248, ${0.3 + Math.cos(t * 2 + i) * 0.15})`)
+                grad.addColorStop(1, 'rgba(129, 140, 248, 0)')
+                ctx.beginPath()
+                ctx.moveTo(x, y - len)
+                ctx.lineTo(x, y + len)
+                ctx.strokeStyle = grad
+                ctx.lineWidth = 1.5
+                ctx.stroke()
+            }
+        }
+
+        // ── Memory banks ── (top and bottom edges)
+        const memSlots = 16
+        const memH = 8
+        for (let i = 0; i < memSlots; i++) {
+            const x = il + (iw / memSlots) * i
+            const w = iw / memSlots - 2
+            const active = Math.sin(t * 2 + i * 0.5) * 0.5 + 0.5
+
+            // Top memory
+            ctx.fillStyle = `rgba(99, 102, 241, ${0.03 + active * 0.06})`
+            ctx.fillRect(x + 1, top + 3, w, memH)
+            ctx.strokeStyle = `rgba(99, 102, 241, ${0.06 + active * 0.08})`
+            ctx.lineWidth = 0.5
+            ctx.strokeRect(x + 1, top + 3, w, memH)
+
+            // Bottom memory
+            ctx.fillStyle = `rgba(99, 102, 241, ${0.03 + active * 0.06})`
+            ctx.fillRect(x + 1, top + chipH - memH - 3, w, memH)
+            ctx.strokeStyle = `rgba(99, 102, 241, ${0.06 + active * 0.08})`
+            ctx.strokeRect(x + 1, top + chipH - memH - 3, w, memH)
+        }
+
+        // ── Corner labels ──
+        ctx.font = '9px "JetBrains Mono", monospace'
+        ctx.fillStyle = 'rgba(124, 58, 237, 0.12)'
+        ctx.textAlign = 'left'
+        ctx.fillText('CUDA CORES', il + 4, it + 12)
+        ctx.textAlign = 'right'
+        ctx.fillText(`${cols * rows} UNITS`, il + iw - 4, it + 12)
+        ctx.textAlign = 'left'
+        ctx.fillText('VRAM', il + 4, top + chipH - pad + 14)
+        ctx.textAlign = 'right'
+        const throughput = (50 + Math.sin(t) * 20).toFixed(0)
+        ctx.fillText(`${throughput} TFLOPS`, il + iw - 4, top + chipH - pad + 14)
+
+        // ── Outer pin connectors ── (left/right edges)
+        const pinCount = 20
+        for (let i = 0; i < pinCount; i++) {
+            const y = top + (chipH / (pinCount + 1)) * (i + 1)
+            const pinLen = 6
+            const pinAlpha = 0.04 + Math.sin(t * 3 + i * 0.6) * 0.03
+
+            // Left pins
             ctx.beginPath()
-            ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2)
-            ctx.fillStyle = g
-            ctx.fill()
+            ctx.moveTo(left - pinLen, y)
+            ctx.lineTo(left, y)
+            ctx.strokeStyle = `rgba(124, 58, 237, ${pinAlpha})`
+            ctx.lineWidth = 1
+            ctx.stroke()
+
+            // Right pins
+            ctx.beginPath()
+            ctx.moveTo(left + chipW, y)
+            ctx.lineTo(left + chipW + pinLen, y)
+            ctx.strokeStyle = `rgba(124, 58, 237, ${pinAlpha})`
+            ctx.stroke()
         }
 
         raf.current = requestAnimationFrame(draw)
-    }, [color])
+    }, [])
 
     useEffect(() => {
         const canvas = canvasRef.current
@@ -111,7 +229,6 @@ export default function GPUParticles({ count = 45, color = [124, 58, 237] }) {
         const resize = () => {
             canvas.width = window.innerWidth
             canvas.height = window.innerHeight
-            if (particles.current.length === 0) init(canvas.width, canvas.height)
         }
         resize()
         window.addEventListener('resize', resize)
@@ -129,7 +246,7 @@ export default function GPUParticles({ count = 45, color = [124, 58, 237] }) {
             window.removeEventListener('mousemove', move)
             if (raf.current) cancelAnimationFrame(raf.current)
         }
-    }, [draw, init])
+    }, [draw])
 
     return (
         <canvas
@@ -139,7 +256,7 @@ export default function GPUParticles({ count = 45, color = [124, 58, 237] }) {
                 inset: 0,
                 pointerEvents: 'none',
                 zIndex: 0,
-                opacity: 0.6,
+                opacity: 0.7,
             }}
         />
     )
