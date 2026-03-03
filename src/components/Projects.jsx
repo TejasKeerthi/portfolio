@@ -3,28 +3,35 @@ import { useRef } from 'react'
 
 const PROJECTS = [
     {
-        title: 'Quantum Dashboard',
-        desc: 'Real-time analytics platform with WebSocket-driven data visualizations and GPU-accelerated charts.',
-        tags: ['React', 'D3.js', 'WebSocket', 'Node.js'],
+        title: 'Sentinel-Net',
+        desc: 'Software reliability monitoring dashboard with real-time failure risk metrics, AI-powered insights, semantic signal feeds, and interactive temporal trend analysis.',
+        tags: ['React', 'TypeScript', 'Python', 'Tailwind', 'Recharts'],
         color: '#7c3aed',
+        link: 'https://github.com/TejasKeerthi/Sentinal-net',
+        live: 'https://tejaskeerthi.github.io/Sentinal-net/',
     },
     {
-        title: 'NeuralChat',
-        desc: 'AI-powered conversational interface with streaming responses, markdown rendering, and voice input.',
-        tags: ['Next.js', 'OpenAI', 'TypeScript', 'Prisma'],
+        title: 'Yatra',
+        desc: 'AI-powered India travel planner using Google Gemini — generates personalized itineraries with interactive maps, PDF export, Firebase auth, and cloud saving.',
+        tags: ['React', 'TypeScript', 'Gemini AI', 'Firebase', 'Leaflet.js'],
         color: '#06b6d4',
+        link: 'https://github.com/TejasKeerthi/yatra',
+        live: 'https://tejaskeerthi.github.io/yatra/',
     },
     {
-        title: 'VoxelForge',
-        desc: 'Browser-based 3D voxel editor with real-time collaboration and export to glTF / OBJ formats.',
-        tags: ['Three.js', 'WebRTC', 'IndexedDB', 'Rust WASM'],
+        title: 'ART-VAULT',
+        desc: 'Digital art gallery platform with Firebase authentication, real-time artwork display, wallet integration, and 3D model viewer support.',
+        tags: ['HTML', 'Tailwind CSS', 'JavaScript', 'Firebase', 'Google Model Viewer'],
         color: '#f59e0b',
+        link: 'https://github.com/TejasKeerthi/ART-VAULT',
+        live: 'https://tejaskeerthi.github.io/ART-VAULT/',
     },
     {
-        title: 'CloudPulse',
-        desc: 'Infrastructure monitoring SaaS with customizable dashboards, alerting, and incident management.',
-        tags: ['Go', 'PostgreSQL', 'React', 'Docker'],
+        title: 'Portfolio',
+        desc: 'This very site — a vibrant 3D portfolio built with React Three Fiber, Framer Motion, glassmorphism, and buttery-smooth Lenis scrolling.',
+        tags: ['React', 'Three.js', 'Framer Motion', 'Vite', 'Tailwind'],
         color: '#10b981',
+        link: 'https://github.com/TejasKeerthi/portfolio',
     },
 ]
 
@@ -141,7 +148,7 @@ export default function Projects() {
                                         {project.desc}
                                     </p>
 
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
                                         {project.tags.map((tag) => (
                                             <span key={tag} style={{
                                                 padding: '4px 12px', borderRadius: 999,
@@ -155,14 +162,29 @@ export default function Projects() {
                                         ))}
                                     </div>
 
-                                    {/* Hover arrow */}
-                                    <motion.span
-                                        initial={{ opacity: 0, x: -6 }}
-                                        whileHover={{ opacity: 1, x: 0 }}
-                                        style={{ position: 'absolute', top: 28, right: 28, fontSize: 18, color: project.color }}
-                                    >
-                                        →
-                                    </motion.span>
+                                    {/* Links */}
+                                    <div style={{ display: 'flex', gap: 12, marginTop: 'auto' }}>
+                                        <motion.a
+                                            href={project.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            whileHover={{ color: project.color }}
+                                            style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', textDecoration: 'none' }}
+                                        >
+                                            GitHub ↗
+                                        </motion.a>
+                                        {project.live && (
+                                            <motion.a
+                                                href={project.live}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                whileHover={{ color: project.color }}
+                                                style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', textDecoration: 'none' }}
+                                            >
+                                                Live Demo ↗
+                                            </motion.a>
+                                        )}
+                                    </div>
                                 </TiltCard>
                             </motion.div>
                         ))}

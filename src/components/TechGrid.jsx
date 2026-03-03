@@ -2,17 +2,19 @@ import { motion } from 'framer-motion'
 
 const TECH = [
     { name: 'React', icon: '⚛️', desc: 'Component-driven UI' },
-    { name: 'Three.js', icon: '🎮', desc: 'Real-time 3D graphics' },
-    { name: 'TypeScript', icon: '🔷', desc: 'Type-safe development' },
+    { name: 'Java', icon: '☕', desc: 'Object-oriented language' },
+    { name: 'Python', icon: '🐍', desc: 'Scripting & automation' },
     { name: 'Node.js', icon: '🟢', desc: 'Server-side runtime' },
+    { name: 'MongoDB', icon: '🍃', desc: 'NoSQL database' },
+    { name: 'SQL', icon: '🗄️', desc: 'Relational queries' },
+    { name: 'HTML', icon: '🌐', desc: 'Markup language' },
+    { name: 'CSS', icon: '🎨', desc: 'Styling & layouts' },
     { name: 'Tailwind', icon: '🌊', desc: 'Utility-first CSS' },
-    { name: 'PostgreSQL', icon: '🐘', desc: 'Relational database' },
-    { name: 'Docker', icon: '🐳', desc: 'Containerization' },
+    { name: 'C', icon: '⚙️', desc: 'Systems programming' },
+    { name: 'Hibernate', icon: '🗃️', desc: 'ORM framework' },
+    { name: 'JSON', icon: '📋', desc: 'Data interchange' },
     { name: 'Git', icon: '📦', desc: 'Version control' },
-    { name: 'Figma', icon: '🎨', desc: 'Design & prototyping' },
-    { name: 'AWS', icon: '☁️', desc: 'Cloud infrastructure' },
-    { name: 'Python', icon: '🐍', desc: 'Automation & ML' },
-    { name: 'GraphQL', icon: '◈', desc: 'Query language' },
+    { name: 'PFSD', icon: '🏗️', desc: 'Full-stack development' },
 ]
 
 const fadeUp = {

@@ -108,10 +108,13 @@ const fadeUp = {
 export default function Hero() {
     return (
         <section id="hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+            {/* Dark overlay to prevent white wash */}
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(3,0,20,0.4) 0%, rgba(3,0,20,0.85) 70%)', pointerEvents: 'none', zIndex: 1 }} />
+
             {/* Glow orbs */}
-            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-                <div className="animate-pulse-glow" style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 65%)' }} />
-                <div className="animate-pulse-glow" style={{ position: 'absolute', bottom: '20%', left: '30%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 65%)', animationDelay: '2.5s' }} />
+            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 2 }}>
+                <div className="animate-pulse-glow" style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 65%)' }} />
+                <div className="animate-pulse-glow" style={{ position: 'absolute', bottom: '20%', left: '30%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 65%)', animationDelay: '2.5s' }} />
             </div>
 
             {/* 3D Canvas */}
@@ -146,7 +149,7 @@ export default function Hero() {
 
                 <motion.h1
                     variants={fadeUp}
-                    style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', fontWeight: 900, lineHeight: 0.95, letterSpacing: '-0.02em', marginBottom: 24 }}
+                    style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', fontWeight: 900, lineHeight: 0.95, letterSpacing: '-0.02em', marginBottom: 24, color: '#ffffff', textShadow: '0 2px 40px rgba(0,0,0,0.5)' }}
                 >
                     Building{' '}
                     <span className="gradient-text">Digital</span>
