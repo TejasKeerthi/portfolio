@@ -18,8 +18,8 @@ const TECH = [
 ]
 
 const fadeUp = {
-    hidden: { opacity: 0, y: 40, filter: 'blur(6px)' },
-    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+    hidden: { opacity: 0, y: 40, filter: 'blur(6px)', scale: 0.92 },
+    visible: { opacity: 1, y: 0, filter: 'blur(0px)', scale: 1 },
 }
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }
 
@@ -73,13 +73,13 @@ export default function TechGrid() {
                                 transition={{ type: 'spring', stiffness: 200, damping: 22 }}
                                 whileHover={{
                                     y: -6,
-                                    borderColor: 'rgba(6,182,212,0.4)',
-                                    boxShadow: '0 0 30px rgba(6,182,212,0.15), inset 0 0 20px rgba(6,182,212,0.04)',
+                                    borderColor: 'rgba(124,58,237,0.4)',
+                                    boxShadow: '0 0 30px rgba(124,58,237,0.15), inset 0 0 20px rgba(124,58,237,0.04)',
                                     background: 'rgba(255,255,255,0.08)',
                                     scale: 1.04,
                                 }}
                                 whileTap={{ scale: 0.97 }}
-                                className="glass-card"
+                                className="glass-card holo-border"
                                 style={{ padding: '24px 16px', cursor: 'default', textAlign: 'center' }}
                             >
                                 <motion.div

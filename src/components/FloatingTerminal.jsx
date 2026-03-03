@@ -74,13 +74,14 @@ export default function FloatingTerminal() {
             <motion.div
                 animate={{ y: [0, -4, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                className="breathe-glow"
                 style={{
-                    background: 'rgba(2, 10, 20, 0.85)',
+                    background: 'rgba(3, 0, 20, 0.85)',
                     backdropFilter: 'blur(16px)',
-                    border: '1px solid rgba(6, 182, 212, 0.2)',
+                    border: '1px solid rgba(124, 58, 237, 0.2)',
                     borderRadius: 12,
                     overflow: 'hidden',
-                    boxShadow: '0 0 30px rgba(6, 182, 212, 0.08), 0 8px 32px rgba(0,0,0,0.4)',
+                    boxShadow: '0 0 30px rgba(124, 58, 237, 0.08), 0 8px 32px rgba(0,0,0,0.4)',
                 }}
             >
                 {/* Title bar */}
@@ -99,7 +100,7 @@ export default function FloatingTerminal() {
                         marginLeft: 8,
                         fontSize: 10,
                         fontWeight: 500,
-                        color: 'rgba(6, 182, 212, 0.6)',
+                        color: 'rgba(124, 58, 237, 0.6)',
                         fontFamily: 'var(--font-mono)',
                         letterSpacing: '0.05em',
                     }}>
@@ -117,20 +118,20 @@ export default function FloatingTerminal() {
                 }}>
                     {/* History lines */}
                     {history.map((line, i) => (
-                        <div key={i} style={{ color: 'rgba(125, 211, 252, 0.35)' }}>
-                            <span style={{ color: 'rgba(6, 182, 212, 0.4)', marginRight: 6 }}>›</span>
+                        <div key={i} style={{ color: 'rgba(167, 139, 250, 0.35)' }}>
+                            <span style={{ color: 'rgba(124, 58, 237, 0.4)', marginRight: 6 }}>›</span>
                             {line}
                         </div>
                     ))}
                     {/* Current typing line */}
-                    <div style={{ color: '#67e8f9' }}>
-                        <span style={{ color: '#06b6d4', marginRight: 6 }}>›</span>
+                    <div style={{ color: '#c084fc' }}>
+                        <span style={{ color: '#7c3aed', marginRight: 6 }}>›</span>
                         {currentLine}
                         <span style={{
                             display: 'inline-block',
                             width: 6,
                             height: 13,
-                            background: showCursor ? '#22d3ee' : 'transparent',
+                            background: showCursor ? '#a78bfa' : 'transparent',
                             marginLeft: 1,
                             verticalAlign: 'middle',
                             transition: 'background 0.1s',

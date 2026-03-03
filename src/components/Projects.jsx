@@ -6,7 +6,7 @@ const PROJECTS = [
         title: 'Sentinel-Net',
         desc: 'Software reliability monitoring dashboard with real-time failure risk metrics, AI-powered insights, semantic signal feeds, and interactive temporal trend analysis.',
         tags: ['React', 'TypeScript', 'Python', 'Tailwind', 'Recharts'],
-        color: '#06b6d4',
+        color: '#7c3aed',
         link: 'https://github.com/TejasKeerthi/Sentinal-net',
         live: 'https://tejaskeerthi.github.io/Sentinal-net/',
     },
@@ -14,7 +14,7 @@ const PROJECTS = [
         title: 'Yatra',
         desc: 'AI-powered India travel planner using Google Gemini — generates personalized itineraries with interactive maps, PDF export, Firebase auth, and cloud saving.',
         tags: ['React', 'TypeScript', 'Gemini AI', 'Firebase', 'Leaflet.js'],
-        color: '#0ea5e9',
+        color: '#06b6d4',
         link: 'https://github.com/TejasKeerthi/yatra',
         live: 'https://tejaskeerthi.github.io/yatra/',
     },
@@ -22,7 +22,7 @@ const PROJECTS = [
         title: 'ART-VAULT',
         desc: 'Digital art gallery platform with Firebase authentication, real-time artwork display, wallet integration, and 3D model viewer support.',
         tags: ['HTML', 'Tailwind CSS', 'JavaScript', 'Firebase', 'Google Model Viewer'],
-        color: '#22d3ee',
+        color: '#f59e0b',
         link: 'https://github.com/TejasKeerthi/ART-VAULT',
         live: 'https://tejaskeerthi.github.io/ART-VAULT/',
     },
@@ -30,18 +30,18 @@ const PROJECTS = [
         title: 'Portfolio',
         desc: 'This very site — a vibrant 3D portfolio built with React Three Fiber, Framer Motion, glassmorphism, and buttery-smooth Lenis scrolling.',
         tags: ['React', 'Three.js', 'Framer Motion', 'Vite', 'Tailwind'],
-        color: '#67e8f9',
+        color: '#10b981',
         link: 'https://github.com/TejasKeerthi/portfolio',
     },
 ]
 
 /* 3-D tilt card */
-function TiltCard({ children, color, style }) {
+function TiltCard({ children, color, style, className }) {
     const ref = useRef(null)
     const x = useMotionValue(0)
     const y = useMotionValue(0)
-    const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [6, -6]), { stiffness: 200, damping: 20 })
-    const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-6, 6]), { stiffness: 200, damping: 20 })
+    const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), { stiffness: 200, damping: 20 })
+    const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), { stiffness: 200, damping: 20 })
 
     function handleMove(e) {
         const rect = ref.current.getBoundingClientRect()
@@ -55,8 +55,9 @@ function TiltCard({ children, color, style }) {
             ref={ref}
             onMouseMove={handleMove}
             onMouseLeave={handleLeave}
-            style={{ ...style, rotateX, rotateY, transformPerspective: 600 }}
-            whileHover={{ borderColor: color + '55', boxShadow: `0 0 40px ${color}20` }}
+            className={className}
+            style={{ ...style, rotateX, rotateY, transformPerspective: 800 }}
+            whileHover={{ borderColor: color + '55', boxShadow: `0 0 40px ${color}20, 0 0 80px ${color}10` }}
         >
             {children}
         </motion.article>
@@ -64,8 +65,8 @@ function TiltCard({ children, color, style }) {
 }
 
 const fadeUp = {
-    hidden: { opacity: 0, y: 50, filter: 'blur(8px)' },
-    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+    hidden: { opacity: 0, y: 50, filter: 'blur(8px)', rotateX: 12, scale: 0.95 },
+    visible: { opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0, scale: 1 },
 }
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }
 
@@ -121,7 +122,9 @@ export default function Projects() {
                                         cursor: 'pointer',
                                         position: 'relative',
                                         overflow: 'hidden',
+                                        perspective: '800px',
                                     }}
+                                    className="holo-border"
                                 >
                                     {/* Gradient corner accent */}
                                     <div style={{

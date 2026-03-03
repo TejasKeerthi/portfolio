@@ -88,7 +88,7 @@ export default function ContactOverlay({ isOpen, onClose }) {
                             maxWidth: 480,
                             height: '100%',
                             overflowY: 'auto',
-                            background: 'rgba(2,10,20,0.95)',
+                            background: 'rgba(10,10,18,0.95)',
                             borderLeft: '1px solid rgba(255,255,255,0.06)',
                             backdropFilter: 'blur(20px)',
                         }}
@@ -98,7 +98,7 @@ export default function ContactOverlay({ isOpen, onClose }) {
                             <motion.button
                                 id="contact-close"
                                 onClick={onClose}
-                                whileHover={{ scale: 1.1, borderColor: 'rgba(6,182,212,0.4)' }}
+                                whileHover={{ scale: 1.1, borderColor: 'rgba(124,58,237,0.4)' }}
                                 whileTap={{ scale: 0.9 }}
                                 style={{
                                     position: 'absolute', top: 24, right: 24,

@@ -11,6 +11,7 @@ import CustomCursor from './components/CustomCursor'
 import ScrollProgress from './components/ScrollProgress'
 import MarqueeBand from './components/MarqueeBand'
 import Footer from './components/Footer'
+import GPUParticles from './components/GPUParticles'
 
 export default function App() {
     const [contactOpen, setContactOpen] = useState(false)
@@ -36,7 +37,8 @@ export default function App() {
     }, [])
 
     return (
-        <div className="noise-overlay" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #061220 0%, #020a14 30%, #000000 100%)' }}>
+        <div className="noise-overlay page-enter" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0a0118 0%, #030014 30%, #000000 100%)' }}>
+            <GPUParticles />
             <CustomCursor />
             <ScrollProgress />
             <Navbar onContactClick={openContact} />

@@ -13,11 +13,11 @@ const FLOAT_ROT_SPEED = 0.005
 const PARALLAX_STRENGTH = 0.2
 const LERP_FACTOR = 0.025
 
-function Keycap({ position, emissiveColor = '#06b6d4', emissiveIntensity = 0.6 }) {
+function Keycap({ position, emissiveColor = '#7c3aed', emissiveIntensity = 0.6 }) {
     return (
         <mesh position={position} castShadow>
             <roundedBoxGeometry args={[0.38, 0.18, 0.38, 0.06, 4]} />
-            <meshStandardMaterial color="#0a1628" emissive={emissiveColor} emissiveIntensity={emissiveIntensity} roughness={0.3} metalness={0.8} />
+            <meshStandardMaterial color="#15102a" emissive={emissiveColor} emissiveIntensity={emissiveIntensity} roughness={0.3} metalness={0.8} />
         </mesh>
     )
 }
@@ -32,7 +32,7 @@ function Macropad() {
         const rows = 3, cols = 3, spacing = 0.48
         const ox = -((cols - 1) * spacing) / 2
         const oz = -((rows - 1) * spacing) / 2
-        const colors = ['#06b6d4','#22d3ee','#67e8f9','#0891b2','#06b6d4','#a5f3fc','#22d3ee','#67e8f9','#0891b2']
+        const colors = ['#7c3aed','#818cf8','#a78bfa','#6d28d9','#7c3aed','#c084fc','#818cf8','#a78bfa','#6d28d9']
         const r = []
         for (let row = 0; row < rows; row++)
             for (let col = 0; col < cols; col++) {
@@ -63,11 +63,11 @@ function Macropad() {
     return (
         <group ref={baseRef}>
             <group ref={groupRef}>
-                <mesh castShadow receiveShadow><boxGeometry args={[2, 0.15, 1.8]} /><meshStandardMaterial color="#060e1a" roughness={0.3} metalness={0.95} /></mesh>
-                <mesh position={[0, 0.08, 0]} castShadow><boxGeometry args={[1.85, 0.06, 1.65]} /><meshStandardMaterial color="#0a1424" roughness={0.4} metalness={0.9} /></mesh>
+                <mesh castShadow receiveShadow><boxGeometry args={[2, 0.15, 1.8]} /><meshStandardMaterial color="#0a0818" roughness={0.3} metalness={0.95} /></mesh>
+                <mesh position={[0, 0.08, 0]} castShadow><boxGeometry args={[1.85, 0.06, 1.65]} /><meshStandardMaterial color="#110d24" roughness={0.4} metalness={0.9} /></mesh>
                 {keys.map((k, i) => <Keycap key={i} position={k.pos} emissiveColor={k.color} emissiveIntensity={k.intensity} />)}
-                <mesh position={[0, 0.26, -0.72]} castShadow><cylinderGeometry args={[0.15, 0.15, 0.14, 24]} /><meshStandardMaterial color="#0c1a2e" emissive="#06b6d4" emissiveIntensity={0.3} roughness={0.2} metalness={0.95} /></mesh>
-                <mesh position={[0, 0.01, 0.92]}><boxGeometry args={[1.4, 0.02, 0.04]} /><meshStandardMaterial color="#06b6d4" emissive="#22d3ee" emissiveIntensity={1.5} toneMapped={false} /></mesh>
+                <mesh position={[0, 0.26, -0.72]} castShadow><cylinderGeometry args={[0.15, 0.15, 0.14, 24]} /><meshStandardMaterial color="#120a30" emissive="#7c3aed" emissiveIntensity={0.3} roughness={0.2} metalness={0.95} /></mesh>
+                <mesh position={[0, 0.01, 0.92]}><boxGeometry args={[1.4, 0.02, 0.04]} /><meshStandardMaterial color="#7c3aed" emissive="#a78bfa" emissiveIntensity={1.5} toneMapped={false} /></mesh>
             </group>
         </group>
     )
@@ -76,7 +76,7 @@ function Macropad() {
 function MouseLight() {
     const ref = useRef()
     useFrame((s) => { if (ref.current) { ref.current.position.x = s.pointer.x * 3; ref.current.position.y = 3 + s.pointer.y * 1.5; ref.current.position.z = 3 } })
-    return <pointLight ref={ref} intensity={25} color="#67e8f9" distance={10} decay={2} />
+    return <pointLight ref={ref} intensity={25} color="#c084fc" distance={10} decay={2} />
 }
 
 function Particles({ count = 60 }) {
@@ -90,7 +90,7 @@ function Particles({ count = 60 }) {
     return (
         <points ref={ref}>
             <bufferGeometry><bufferAttribute attach="attributes-position" array={positions} count={count} itemSize={3} /></bufferGeometry>
-            <pointsMaterial size={0.03} color="#22d3ee" transparent opacity={0.3} sizeAttenuation />
+            <pointsMaterial size={0.03} color="#a78bfa" transparent opacity={0.3} sizeAttenuation />
         </points>
     )
 }
@@ -101,33 +101,33 @@ const stagger = {
     visible: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
 }
 const fadeUp = {
-    hidden: { opacity: 0, y: 30, filter: 'blur(8px)' },
-    visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+    hidden: { opacity: 0, y: 30, filter: 'blur(8px)', rotateX: 15 },
+    visible: { opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
 }
 
 export default function Hero() {
     return (
         <section id="hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             {/* Dark overlay to prevent white wash */}
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(2,10,20,0.4) 0%, rgba(2,10,20,0.85) 70%)', pointerEvents: 'none', zIndex: 1 }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(3,0,20,0.4) 0%, rgba(3,0,20,0.85) 70%)', pointerEvents: 'none', zIndex: 1 }} />
 
             {/* Glow orbs */}
             <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 2 }}>
-                <div className="animate-pulse-glow" style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 65%)' }} />
-                <div className="animate-pulse-glow" style={{ position: 'absolute', bottom: '20%', left: '30%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(34,211,238,0.10) 0%, transparent 65%)', animationDelay: '2.5s' }} />
+                <div className="animate-pulse-glow parallax-slow" style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 65%)' }} />
+                <div className="animate-pulse-glow parallax-fast" style={{ position: 'absolute', bottom: '20%', left: '30%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 65%)', animationDelay: '2.5s' }} />
             </div>
 
             {/* 3D Canvas */}
             <div className="hero-canvas">
                 <Canvas shadows camera={{ position: [0, 2.5, 5.5], fov: 40 }} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }}>
                     <color attach="background" args={['transparent']} />
-                    <fog attach="fog" args={['#020a14', 8, 18]} />
+                    <fog attach="fog" args={['#030014', 8, 18]} />
                     <ambientLight intensity={1.2} />
                     <directionalLight position={[5, 8, 5]} intensity={1.5} castShadow shadow-mapSize={512} />
-                    <pointLight position={[-4, 3, -3]} intensity={10} color="#22d3ee" distance={10} decay={2} />
+                    <pointLight position={[-4, 3, -3]} intensity={10} color="#818cf8" distance={10} decay={2} />
                     <MouseLight />
                     <Macropad />
-                    <ContactShadows position={[0, -1.2, 0]} opacity={0.4} scale={8} blur={2} far={4} color="#06b6d4" />
+                    <ContactShadows position={[0, -1.2, 0]} opacity={0.4} scale={8} blur={2} far={4} color="#7c3aed" />
                     <Particles />
                     <Environment preset="city" />
                 </Canvas>
@@ -138,7 +138,7 @@ export default function Hero() {
                 variants={stagger}
                 initial="hidden"
                 animate="visible"
-                style={{ position: 'relative', zIndex: 10, textAlign: 'center', width: '100%', maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}
+                style={{ position: 'relative', zIndex: 10, textAlign: 'center', width: '100%', maxWidth: 1200, margin: '0 auto', padding: '0 24px', perspective: '1000px' }}
             >
                 <motion.p
                     variants={fadeUp}
@@ -167,9 +167,9 @@ export default function Hero() {
                 <motion.div variants={fadeUp} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
                     <motion.a
                         href="#projects"
-                        whileHover={{ scale: 1.06, boxShadow: '0 0 40px rgba(6,182,212,0.5)' }}
+                        whileHover={{ scale: 1.06, boxShadow: '0 0 40px rgba(124,58,237,0.5)' }}
                         whileTap={{ scale: 0.96 }}
-                        style={{ padding: '14px 32px', borderRadius: 999, fontSize: 14, fontWeight: 600, background: 'linear-gradient(135deg, #06b6d4, #0891b2)', color: '#fff', textDecoration: 'none', boxShadow: '0 0 30px rgba(6,182,212,0.3)' }}
+                        style={{ padding: '14px 32px', borderRadius: 999, fontSize: 14, fontWeight: 600, background: 'linear-gradient(135deg, #7c3aed, #9333ea)', color: '#fff', textDecoration: 'none', boxShadow: '0 0 30px rgba(124,58,237,0.3)' }}
                     >
                         View Work
                     </motion.a>

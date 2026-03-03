@@ -9,8 +9,8 @@ const INTERESTS = [
 ]
 
 const fadeUp = {
-    hidden: { opacity: 0, y: 40, filter: 'blur(6px)' },
-    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+    hidden: { opacity: 0, y: 40, filter: 'blur(6px)', rotateX: 10 },
+    visible: { opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0 },
 }
 const stagger = {
     hidden: {},
@@ -52,8 +52,8 @@ export default function About() {
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                             viewport={{ once: true }}
-                            whileHover={{ borderColor: 'rgba(6,182,212,0.3)', y: -3 }}
-                            className="glass-card animate-shimmer"
+                            whileHover={{ borderColor: 'rgba(124,58,237,0.3)', y: -3 }}
+                            className="glass-card animate-shimmer holo-border breathe-glow"
                             style={{ padding: 32 }}
                         >
                             <p style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--text-secondary)' }}>
@@ -68,8 +68,8 @@ export default function About() {
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                             viewport={{ once: true }}
-                            whileHover={{ borderColor: 'rgba(6,182,212,0.3)', y: -3 }}
-                            className="glass-card animate-shimmer"
+                            whileHover={{ borderColor: 'rgba(124,58,237,0.3)', y: -3 }}
+                            className="glass-card animate-shimmer holo-border breathe-glow"
                             style={{ padding: 32 }}
                         >
                             <p style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--text-secondary)' }}>
@@ -93,7 +93,7 @@ export default function About() {
                                 key={label}
                                 variants={fadeUp}
                                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                                whileHover={{ y: -5, scale: 1.08, borderColor: 'rgba(6,182,212,0.4)', boxShadow: '0 0 25px rgba(6,182,212,0.15)' }}
+                                whileHover={{ y: -5, scale: 1.08, borderColor: 'rgba(124,58,237,0.4)', boxShadow: '0 0 25px rgba(124,58,237,0.15)' }}
                                 whileTap={{ scale: 0.95 }}
                                 className="glass-card"
                                 style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 22px', cursor: 'default' }}
