@@ -15,9 +15,9 @@ export default function MarqueeBand() {
         <div style={{
             overflow: 'hidden',
             padding: '20px 0',
-            background: 'rgba(124,58,237,0.04)',
-            borderTop: '1px solid rgba(124,58,237,0.1)',
-            borderBottom: '1px solid rgba(124,58,237,0.1)',
+            background: 'rgba(148,163,184,0.03)',
+            borderTop: '1px solid rgba(148,163,184,0.08)',
+            borderBottom: '1px solid rgba(148,163,184,0.08)',
             position: 'relative',
         }}>
             {/* Left / Right fade masks */}
@@ -34,7 +34,7 @@ export default function MarqueeBand() {
                     fontWeight: 600,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
-                    color: 'rgba(167,139,250,0.35)',
+                    color: 'rgba(148,163,184,0.30)',
                     fontFamily: 'var(--font-mono)',
                     gap: 0,
                     willChange: 'transform',

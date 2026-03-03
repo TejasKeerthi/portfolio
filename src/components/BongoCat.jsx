@@ -49,38 +49,38 @@ export default function BongoCat() {
         >
             <svg viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
                 {/* Body */}
-                <ellipse cx="100" cy="130" rx="70" ry="40" fill="#1a1a2e" stroke="#7c3aed" strokeWidth="2" />
+                <ellipse cx="100" cy="130" rx="70" ry="40" fill="#141820" stroke="#94a3b8" strokeWidth="2" />
 
                 {/* Head */}
-                <ellipse cx="100" cy="75" rx="55" ry="45" fill="#1a1a2e" stroke="#7c3aed" strokeWidth="2" />
+                <ellipse cx="100" cy="75" rx="55" ry="45" fill="#141820" stroke="#94a3b8" strokeWidth="2" />
 
                 {/* Left ear */}
-                <path d="M55 45 L40 10 L70 35 Z" fill="#1a1a2e" stroke="#7c3aed" strokeWidth="2" />
-                <path d="M55 40 L45 18 L65 35 Z" fill="#7c3aed" opacity="0.3" />
+                <path d="M55 45 L40 10 L70 35 Z" fill="#141820" stroke="#94a3b8" strokeWidth="2" />
+                <path d="M55 40 L45 18 L65 35 Z" fill="#94a3b8" opacity="0.3" />
 
                 {/* Right ear */}
-                <path d="M145 45 L160 10 L130 35 Z" fill="#1a1a2e" stroke="#7c3aed" strokeWidth="2" />
-                <path d="M145 40 L155 18 L135 35 Z" fill="#7c3aed" opacity="0.3" />
+                <path d="M145 45 L160 10 L130 35 Z" fill="#141820" stroke="#94a3b8" strokeWidth="2" />
+                <path d="M145 40 L155 18 L135 35 Z" fill="#94a3b8" opacity="0.3" />
 
                 {/* Eyes */}
                 <g transform={`translate(0, ${eyeY})`}>
-                    <circle cx="80" cy="70" r="5" fill="#a78bfa" />
+                    <circle cx="80" cy="70" r="5" fill="#cbd5e1" />
                     <circle cx="80" cy="69" r="2" fill="#f0f0f5" />
-                    <circle cx="120" cy="70" r="5" fill="#a78bfa" />
+                    <circle cx="120" cy="70" r="5" fill="#cbd5e1" />
                     <circle cx="120" cy="69" r="2" fill="#f0f0f5" />
                 </g>
 
                 {/* Nose */}
-                <ellipse cx="100" cy="82" rx="4" ry="3" fill="#a78bfa" />
+                <ellipse cx="100" cy="82" rx="4" ry="3" fill="#cbd5e1" />
 
                 {/* Mouth */}
-                <path d="M93 86 Q100 92 107 86" stroke="#a78bfa" strokeWidth="1.5" fill="none" />
+                <path d="M93 86 Q100 92 107 86" stroke="#cbd5e1" strokeWidth="1.5" fill="none" />
 
                 {/* Whiskers */}
-                <line x1="55" y1="78" x2="78" y2="80" stroke="#7c3aed" strokeWidth="1" opacity="0.5" />
-                <line x1="55" y1="85" x2="78" y2="84" stroke="#7c3aed" strokeWidth="1" opacity="0.5" />
-                <line x1="122" y1="80" x2="145" y2="78" stroke="#7c3aed" strokeWidth="1" opacity="0.5" />
-                <line x1="122" y1="84" x2="145" y2="85" stroke="#7c3aed" strokeWidth="1" opacity="0.5" />
+                <line x1="55" y1="78" x2="78" y2="80" stroke="#94a3b8" strokeWidth="1" opacity="0.5" />
+                <line x1="55" y1="85" x2="78" y2="84" stroke="#94a3b8" strokeWidth="1" opacity="0.5" />
+                <line x1="122" y1="80" x2="145" y2="78" stroke="#94a3b8" strokeWidth="1" opacity="0.5" />
+                <line x1="122" y1="84" x2="145" y2="85" stroke="#94a3b8" strokeWidth="1" opacity="0.5" />
 
                 {/* Left paw */}
                 <g
@@ -90,10 +90,10 @@ export default function BongoCat() {
                         transformOrigin: '60px 150px',
                     }}
                 >
-                    <ellipse cx="55" cy="155" rx="18" ry="12" fill="#1a1a2e" stroke="#7c3aed" strokeWidth="2" />
-                    <circle cx="47" cy="152" r="3" fill="#7c3aed" opacity="0.4" />
-                    <circle cx="55" cy="149" r="3" fill="#7c3aed" opacity="0.4" />
-                    <circle cx="63" cy="152" r="3" fill="#7c3aed" opacity="0.4" />
+                    <ellipse cx="55" cy="155" rx="18" ry="12" fill="#141820" stroke="#94a3b8" strokeWidth="2" />
+                    <circle cx="47" cy="152" r="3" fill="#94a3b8" opacity="0.4" />
+                    <circle cx="55" cy="149" r="3" fill="#94a3b8" opacity="0.4" />
+                    <circle cx="63" cy="152" r="3" fill="#94a3b8" opacity="0.4" />
                 </g>
 
                 {/* Right paw */}
@@ -104,10 +104,10 @@ export default function BongoCat() {
                         transformOrigin: '140px 150px',
                     }}
                 >
-                    <ellipse cx="145" cy="155" rx="18" ry="12" fill="#1a1a2e" stroke="#7c3aed" strokeWidth="2" />
-                    <circle cx="137" cy="152" r="3" fill="#7c3aed" opacity="0.4" />
-                    <circle cx="145" cy="149" r="3" fill="#7c3aed" opacity="0.4" />
-                    <circle cx="153" cy="152" r="3" fill="#7c3aed" opacity="0.4" />
+                    <ellipse cx="145" cy="155" rx="18" ry="12" fill="#141820" stroke="#94a3b8" strokeWidth="2" />
+                    <circle cx="137" cy="152" r="3" fill="#94a3b8" opacity="0.4" />
+                    <circle cx="145" cy="149" r="3" fill="#94a3b8" opacity="0.4" />
+                    <circle cx="153" cy="152" r="3" fill="#94a3b8" opacity="0.4" />
                 </g>
             </svg>
         </div>

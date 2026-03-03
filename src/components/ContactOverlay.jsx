@@ -88,7 +88,7 @@ export default function ContactOverlay({ isOpen, onClose }) {
                             maxWidth: 480,
                             height: '100%',
                             overflowY: 'auto',
-                            background: 'rgba(10,10,18,0.95)',
+                            background: 'rgba(10,12,16,0.95)',
                             borderLeft: '1px solid rgba(255,255,255,0.06)',
                             backdropFilter: 'blur(20px)',
                         }}
@@ -98,7 +98,7 @@ export default function ContactOverlay({ isOpen, onClose }) {
                             <motion.button
                                 id="contact-close"
                                 onClick={onClose}
-                                whileHover={{ scale: 1.1, borderColor: 'rgba(124,58,237,0.4)' }}
+                                whileHover={{ scale: 1.1, borderColor: 'rgba(148,163,184,0.3)' }}
                                 whileTap={{ scale: 0.9 }}
                                 style={{
                                     position: 'absolute', top: 24, right: 24,
@@ -190,7 +190,7 @@ export default function ContactOverlay({ isOpen, onClose }) {
                                         type="submit"
                                         variants={fieldVariants}
                                         transition={{ type: 'spring', stiffness: 150, damping: 18 }}
-                                        whileHover={{ y: -2, boxShadow: '0 0 40px rgba(124,58,237,0.5)' }}
+                                        whileHover={{ y: -2, boxShadow: '0 0 35px rgba(148,163,184,0.3), inset 0 1px 0 rgba(255,255,255,0.12)' }}
                                         whileTap={{ scale: 0.98 }}
                                         style={{
                                             width: '100%',
@@ -199,10 +199,11 @@ export default function ContactOverlay({ isOpen, onClose }) {
                                             fontSize: 14,
                                             fontWeight: 600,
                                             cursor: 'pointer',
-                                            background: 'linear-gradient(135deg, var(--accent), #9333ea)',
-                                            color: '#fff',
-                                            border: 'none',
-                                            boxShadow: '0 0 25px var(--accent-glow)',
+                                            background: 'rgba(255,255,255,0.08)',
+                                            backdropFilter: 'blur(12px)',
+                                            color: '#e2e8f0',
+                                            border: '1px solid rgba(255,255,255,0.15)',
+                                            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 0 20px rgba(148,163,184,0.1)',
                                         }}
                                     >
                                         Send Message →

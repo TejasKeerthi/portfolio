@@ -13,11 +13,11 @@ const FLOAT_ROT_SPEED = 0.005
 const PARALLAX_STRENGTH = 0.2
 const LERP_FACTOR = 0.025
 
-function Keycap({ position, emissiveColor = '#7c3aed', emissiveIntensity = 0.6 }) {
+function Keycap({ position, emissiveColor = '#94a3b8', emissiveIntensity = 0.6 }) {
     return (
         <mesh position={position} castShadow>
             <roundedBoxGeometry args={[0.38, 0.18, 0.38, 0.06, 4]} />
-            <meshStandardMaterial color="#15102a" emissive={emissiveColor} emissiveIntensity={emissiveIntensity} roughness={0.3} metalness={0.8} />
+            <meshStandardMaterial color="#141820" emissive={emissiveColor} emissiveIntensity={emissiveIntensity} roughness={0.3} metalness={0.8} />
         </mesh>
     )
 }
@@ -32,7 +32,7 @@ function Macropad() {
         const rows = 3, cols = 3, spacing = 0.48
         const ox = -((cols - 1) * spacing) / 2
         const oz = -((rows - 1) * spacing) / 2
-        const colors = ['#7c3aed','#818cf8','#a78bfa','#6d28d9','#7c3aed','#c084fc','#818cf8','#a78bfa','#6d28d9']
+        const colors = ['#94a3b8','#b0bec5','#cbd5e1','#78909c','#94a3b8','#e2e8f0','#b0bec5','#cbd5e1','#78909c']
         const r = []
         for (let row = 0; row < rows; row++)
             for (let col = 0; col < cols; col++) {
@@ -63,11 +63,11 @@ function Macropad() {
     return (
         <group ref={baseRef}>
             <group ref={groupRef}>
-                <mesh castShadow receiveShadow><boxGeometry args={[2, 0.15, 1.8]} /><meshStandardMaterial color="#0a0818" roughness={0.3} metalness={0.95} /></mesh>
-                <mesh position={[0, 0.08, 0]} castShadow><boxGeometry args={[1.85, 0.06, 1.65]} /><meshStandardMaterial color="#110d24" roughness={0.4} metalness={0.9} /></mesh>
+                <mesh castShadow receiveShadow><boxGeometry args={[2, 0.15, 1.8]} /><meshStandardMaterial color="#0c0f14" roughness={0.3} metalness={0.95} /></mesh>
+                <mesh position={[0, 0.08, 0]} castShadow><boxGeometry args={[1.85, 0.06, 1.65]} /><meshStandardMaterial color="#12161e" roughness={0.4} metalness={0.9} /></mesh>
                 {keys.map((k, i) => <Keycap key={i} position={k.pos} emissiveColor={k.color} emissiveIntensity={k.intensity} />)}
-                <mesh position={[0, 0.26, -0.72]} castShadow><cylinderGeometry args={[0.15, 0.15, 0.14, 24]} /><meshStandardMaterial color="#1a1535" emissive="#7c3aed" emissiveIntensity={0.3} roughness={0.2} metalness={0.95} /></mesh>
-                <mesh position={[0, 0.01, 0.92]}><boxGeometry args={[1.4, 0.02, 0.04]} /><meshStandardMaterial color="#7c3aed" emissive="#a78bfa" emissiveIntensity={1.5} toneMapped={false} /></mesh>
+                <mesh position={[0, 0.26, -0.72]} castShadow><cylinderGeometry args={[0.15, 0.15, 0.14, 24]} /><meshStandardMaterial color="#1a1e26" emissive="#94a3b8" emissiveIntensity={0.3} roughness={0.2} metalness={0.95} /></mesh>
+                <mesh position={[0, 0.01, 0.92]}><boxGeometry args={[1.4, 0.02, 0.04]} /><meshStandardMaterial color="#94a3b8" emissive="#cbd5e1" emissiveIntensity={1.5} toneMapped={false} /></mesh>
             </group>
         </group>
     )
@@ -76,7 +76,7 @@ function Macropad() {
 function MouseLight() {
     const ref = useRef()
     useFrame((s) => { if (ref.current) { ref.current.position.x = s.pointer.x * 3; ref.current.position.y = 3 + s.pointer.y * 1.5; ref.current.position.z = 3 } })
-    return <pointLight ref={ref} intensity={25} color="#c084fc" distance={10} decay={2} />
+    return <pointLight ref={ref} intensity={25} color="#e2e8f0" distance={10} decay={2} />
 }
 
 function Particles({ count = 60 }) {
@@ -90,7 +90,7 @@ function Particles({ count = 60 }) {
     return (
         <points ref={ref}>
             <bufferGeometry><bufferAttribute attach="attributes-position" array={positions} count={count} itemSize={3} /></bufferGeometry>
-            <pointsMaterial size={0.03} color="#a78bfa" transparent opacity={0.3} sizeAttenuation />
+            <pointsMaterial size={0.03} color="#cbd5e1" transparent opacity={0.3} sizeAttenuation />
         </points>
     )
 }
@@ -109,25 +109,25 @@ export default function Hero() {
     return (
         <section id="hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             {/* Dark overlay to prevent white wash */}
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(3,0,20,0.4) 0%, rgba(3,0,20,0.85) 70%)', pointerEvents: 'none', zIndex: 1 }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(6,8,9,0.4) 0%, rgba(6,8,9,0.85) 70%)', pointerEvents: 'none', zIndex: 1 }} />
 
             {/* Glow orbs */}
             <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 2 }}>
-                <div className="animate-pulse-glow" style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 65%)' }} />
-                <div className="animate-pulse-glow" style={{ position: 'absolute', bottom: '20%', left: '30%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 65%)', animationDelay: '2.5s' }} />
+                <div className="animate-pulse-glow" style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(148,163,184,0.10) 0%, transparent 65%)' }} />
+                <div className="animate-pulse-glow" style={{ position: 'absolute', bottom: '20%', left: '30%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(100,116,139,0.08) 0%, transparent 65%)', animationDelay: '2.5s' }} />
             </div>
 
             {/* 3D Canvas */}
             <div className="hero-canvas">
                 <Canvas shadows camera={{ position: [0, 2.5, 5.5], fov: 40 }} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }}>
                     <color attach="background" args={['transparent']} />
-                    <fog attach="fog" args={['#030014', 8, 18]} />
+                    <fog attach="fog" args={['#060809', 8, 18]} />
                     <ambientLight intensity={1.2} />
                     <directionalLight position={[5, 8, 5]} intensity={1.5} castShadow shadow-mapSize={512} />
-                    <pointLight position={[-4, 3, -3]} intensity={10} color="#818cf8" distance={10} decay={2} />
+                    <pointLight position={[-4, 3, -3]} intensity={10} color="#b0bec5" distance={10} decay={2} />
                     <MouseLight />
                     <Macropad />
-                    <ContactShadows position={[0, -1.2, 0]} opacity={0.4} scale={8} blur={2} far={4} color="#7c3aed" />
+                    <ContactShadows position={[0, -1.2, 0]} opacity={0.4} scale={8} blur={2} far={4} color="#94a3b8" />
                     <Particles />
                     <Environment preset="city" />
                 </Canvas>
@@ -167,9 +167,9 @@ export default function Hero() {
                 <motion.div variants={fadeUp} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
                     <motion.a
                         href="#projects"
-                        whileHover={{ scale: 1.06, boxShadow: '0 0 40px rgba(124,58,237,0.5)' }}
+                        whileHover={{ scale: 1.06, boxShadow: '0 0 35px rgba(148,163,184,0.35), inset 0 1px 0 rgba(255,255,255,0.15)' }}
                         whileTap={{ scale: 0.96 }}
-                        style={{ padding: '14px 32px', borderRadius: 999, fontSize: 14, fontWeight: 600, background: 'linear-gradient(135deg, #7c3aed, #9333ea)', color: '#fff', textDecoration: 'none', boxShadow: '0 0 30px rgba(124,58,237,0.3)' }}
+                        style={{ padding: '14px 32px', borderRadius: 999, fontSize: 14, fontWeight: 600, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.18)', color: '#e2e8f0', textDecoration: 'none', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 0 20px rgba(148,163,184,0.15)' }}
                     >
                         View Work
                     </motion.a>

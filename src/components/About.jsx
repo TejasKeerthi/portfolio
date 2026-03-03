@@ -52,7 +52,7 @@ export default function About() {
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                             viewport={{ once: true }}
-                            whileHover={{ borderColor: 'rgba(124,58,237,0.3)', y: -3 }}
+                            whileHover={{ borderColor: 'rgba(148,163,184,0.25)', y: -3 }}
                             className="glass-card animate-shimmer"
                             style={{ padding: 32 }}
                         >
@@ -68,7 +68,7 @@ export default function About() {
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                             viewport={{ once: true }}
-                            whileHover={{ borderColor: 'rgba(124,58,237,0.3)', y: -3 }}
+                            whileHover={{ borderColor: 'rgba(148,163,184,0.25)', y: -3 }}
                             className="glass-card animate-shimmer"
                             style={{ padding: 32 }}
                         >
@@ -93,7 +93,7 @@ export default function About() {
                                 key={label}
                                 variants={fadeUp}
                                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                                whileHover={{ y: -5, scale: 1.08, borderColor: 'rgba(124,58,237,0.4)', boxShadow: '0 0 25px rgba(124,58,237,0.15)' }}
+                                whileHover={{ y: -5, scale: 1.08, borderColor: 'rgba(148,163,184,0.3)', boxShadow: '0 0 25px rgba(148,163,184,0.1)' }}
                                 whileTap={{ scale: 0.95 }}
                                 className="glass-card"
                                 style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 22px', cursor: 'default' }}

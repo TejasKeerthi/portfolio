@@ -28,8 +28,8 @@ export default function Navbar({ onContactClick }) {
                 right: 0,
                 zIndex: 50,
                 padding: scrolled ? '12px 0' : '20px 0',
-                background: scrolled ? 'rgba(3, 0, 20, 0.85)' : 'transparent',
-                backdropFilter: scrolled ? 'blur(20px) saturate(150%)' : 'none',
+                background: scrolled ? 'rgba(6, 8, 9, 0.85)' : 'transparent',
+                backdropFilter: scrolled ? 'blur(20px) saturate(140%)' : 'none',
                 borderBottom: scrolled ? '1px solid rgba(255,255,255,0.05)' : 'none',
                 transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
@@ -51,9 +51,11 @@ export default function Navbar({ onContactClick }) {
                         justifyContent: 'center',
                         fontSize: 14,
                         fontWeight: 800,
-                        background: 'linear-gradient(135deg, #7c3aed, #9333ea)',
-                        color: '#fff',
-                        boxShadow: '0 0 25px rgba(124,58,237,0.4)',
+                        background: 'rgba(255,255,255,0.08)',
+                        backdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#e2e8f0',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 0 20px rgba(148,163,184,0.15)',
                     }}>
                         T
                     </div>
@@ -100,18 +102,19 @@ export default function Navbar({ onContactClick }) {
                 {/* CTA */}
                 <motion.button
                     onClick={onContactClick}
-                    whileHover={{ scale: 1.05, boxShadow: '0 0 35px rgba(124,58,237,0.5)' }}
+                    whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(148,163,184,0.3), inset 0 1px 0 rgba(255,255,255,0.15)' }}
                     whileTap={{ scale: 0.95 }}
                     style={{
                         padding: '8px 22px',
                         borderRadius: 999,
                         fontSize: 13,
                         fontWeight: 600,
-                        background: 'linear-gradient(135deg, #7c3aed, #9333ea)',
-                        color: '#fff',
-                        border: 'none',
+                        background: 'rgba(255,255,255,0.08)',
+                        backdropFilter: 'blur(12px)',
+                        color: '#e2e8f0',
+                        border: '1px solid rgba(255,255,255,0.15)',
                         cursor: 'pointer',
-                        boxShadow: '0 0 20px rgba(124,58,237,0.3)',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 0 15px rgba(148,163,184,0.1)',
                     }}
                 >
                     Get in Touch

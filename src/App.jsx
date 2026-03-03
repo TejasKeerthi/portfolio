@@ -36,7 +36,7 @@ export default function App() {
     }, [])
 
     return (
-        <div className="noise-overlay" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0a0118 0%, #030014 30%, #000000 100%)' }}>
+        <div className="noise-overlay" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0a0d11 0%, #060809 30%, #000000 100%)' }}>
             <CustomCursor />
             <ScrollProgress />
             <Navbar onContactClick={openContact} />

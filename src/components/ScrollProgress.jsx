@@ -12,11 +12,11 @@ export default function ScrollProgress() {
                 left: 0,
                 right: 0,
                 height: 3,
-                background: 'linear-gradient(90deg, #7c3aed, #c084fc, #818cf8)',
+                background: 'linear-gradient(90deg, #64748b, #94a3b8, #cbd5e1)',
                 transformOrigin: '0%',
                 scaleX,
                 zIndex: 9998,
-                boxShadow: '0 0 12px rgba(124,58,237,0.5)',
+                boxShadow: '0 0 12px rgba(148,163,184,0.4)',
             }}
         />
     )

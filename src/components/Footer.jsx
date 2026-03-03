@@ -47,7 +47,7 @@ export default function Footer() {
                             href={href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            whileHover={{ y: -3, color: '#c084fc' }}
+                            whileHover={{ y: -3, color: '#e2e8f0' }}
                             style={{
                                 fontSize: 13,
                                 fontWeight: 500,

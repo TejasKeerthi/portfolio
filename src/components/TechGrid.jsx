@@ -73,8 +73,8 @@ export default function TechGrid() {
                                 transition={{ type: 'spring', stiffness: 200, damping: 22 }}
                                 whileHover={{
                                     y: -6,
-                                    borderColor: 'rgba(124,58,237,0.4)',
-                                    boxShadow: '0 0 30px rgba(124,58,237,0.15), inset 0 0 20px rgba(124,58,237,0.04)',
+                                    borderColor: 'rgba(148,163,184,0.3)',
+                                    boxShadow: '0 0 30px rgba(148,163,184,0.1), inset 0 0 20px rgba(148,163,184,0.03)',
                                     background: 'rgba(255,255,255,0.08)',
                                     scale: 1.04,
                                 }}
