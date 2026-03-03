@@ -46,7 +46,7 @@ export default function CustomCursor() {
                     ctx.beginPath()
                     ctx.moveTo(pts[i].x, pts[i].y)
                     ctx.lineTo(pts[j].x, pts[j].y)
-                    ctx.strokeStyle = `rgba(203, 213, 225, ${alpha})`
+                    ctx.strokeStyle = `rgba(34, 211, 238, ${alpha})`
                     ctx.lineWidth = 1
                     ctx.stroke()
                 }
@@ -61,8 +61,8 @@ export default function CustomCursor() {
 
             // Outer glow
             const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 4)
-            grad.addColorStop(0, `rgba(148, 163, 184, ${alpha * 0.3})`)
-            grad.addColorStop(1, 'rgba(148, 163, 184, 0)')
+            grad.addColorStop(0, `rgba(6, 182, 212, ${alpha * 0.3})`)
+            grad.addColorStop(1, 'rgba(6, 182, 212, 0)')
             ctx.beginPath()
             ctx.arc(p.x, p.y, r * 4, 0, Math.PI * 2)
             ctx.fillStyle = grad
@@ -71,8 +71,8 @@ export default function CustomCursor() {
             // Core node
             ctx.beginPath()
             ctx.arc(p.x, p.y, r, 0, Math.PI * 2)
-            ctx.fillStyle = `rgba(220, 225, 235, ${alpha})`
-            ctx.shadowColor = 'rgba(203, 213, 225, 0.8)'
+            ctx.fillStyle = `rgba(165, 243, 252, ${alpha})`
+            ctx.shadowColor = 'rgba(34, 211, 238, 0.8)'
             ctx.shadowBlur = 12 * alpha
             ctx.fill()
             ctx.shadowBlur = 0
@@ -87,19 +87,19 @@ export default function CustomCursor() {
             const pulse = 0.5 + 0.5 * Math.sin(Date.now() * 0.005)
             ctx.beginPath()
             ctx.arc(x, y, coreR + 8 + pulse * 6, 0, Math.PI * 2)
-            ctx.strokeStyle = `rgba(148, 163, 184, ${0.12 + pulse * 0.08})`
+            ctx.strokeStyle = `rgba(6, 182, 212, ${0.12 + pulse * 0.08})`
             ctx.lineWidth = 1.5
             ctx.stroke()
 
             // Bright center
             const cg = ctx.createRadialGradient(x, y, 0, x, y, coreR)
             cg.addColorStop(0, 'rgba(255, 255, 255, 0.95)')
-            cg.addColorStop(0.4, 'rgba(203, 213, 225, 0.8)')
-            cg.addColorStop(1, 'rgba(148, 163, 184, 0.4)')
+            cg.addColorStop(0.4, 'rgba(103, 232, 249, 0.8)')
+            cg.addColorStop(1, 'rgba(6, 182, 212, 0.4)')
             ctx.beginPath()
             ctx.arc(x, y, coreR, 0, Math.PI * 2)
             ctx.fillStyle = cg
-            ctx.shadowColor = '#cbd5e1'
+            ctx.shadowColor = '#22d3ee'
             ctx.shadowBlur = 20
             ctx.fill()
             ctx.shadowBlur = 0

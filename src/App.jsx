@@ -5,7 +5,7 @@ import Hero from './components/Hero'
 import About from './components/About'
 import TechGrid from './components/TechGrid'
 import Projects from './components/Projects'
-import BongoCat from './components/BongoCat'
+import BongoCat from './components/FloatingTerminal'
 import ContactOverlay from './components/ContactOverlay'
 import CustomCursor from './components/CustomCursor'
 import ScrollProgress from './components/ScrollProgress'
@@ -36,7 +36,7 @@ export default function App() {
     }, [])
 
     return (
-        <div className="noise-overlay" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0a0d11 0%, #060809 30%, #000000 100%)' }}>
+        <div className="noise-overlay" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #061220 0%, #020a14 30%, #000000 100%)' }}>
             <CustomCursor />
             <ScrollProgress />
             <Navbar onContactClick={openContact} />
