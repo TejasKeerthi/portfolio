@@ -145,3 +145,8 @@ section { position: relative; }
   margin: 0 auto;
   max-width: 600px;
 }
+
+/* ── Custom cursor: hide default on desktop ── */
+@media (pointer: fine) {
+  * { cursor: none !important; }
+}

@@ -1,41 +1,12 @@
-import { motion, useInView } from 'framer-motion'
-import { useRef, useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 
-const stats = [
-    { value: 5, suffix: '+', label: 'Years Experience' },
-    { value: 40, suffix: '+', label: 'Projects Shipped' },
-    { value: 99, suffix: '%', label: 'Lighthouse Scores' },
-    { value: null, symbol: '∞', label: 'Curiosity' },
+const INTERESTS = [
+    { emoji: '🧠', label: 'Deep Learning' },
+    { emoji: '📊', label: 'Data Viz' },
+    { emoji: '🤖', label: 'NLP' },
+    { emoji: '👁️', label: 'Computer Vision' },
+    { emoji: '∞', label: 'Curiosity', gradient: true },
 ]
-
-/* Animated counter */
-function Counter({ value, suffix = '', symbol }) {
-    const ref = useRef(null)
-    const isInView = useInView(ref, { once: true })
-    const [count, setCount] = useState(0)
-
-    useEffect(() => {
-        if (!isInView || symbol) return
-        let start = 0
-        const end = value
-        const duration = 1500
-        const startTime = Date.now()
-        const tick = () => {
-            const elapsed = Date.now() - startTime
-            const progress = Math.min(elapsed / duration, 1)
-            const eased = 1 - Math.pow(1 - progress, 3)
-            setCount(Math.floor(eased * end))
-            if (progress < 1) requestAnimationFrame(tick)
-        }
-        requestAnimationFrame(tick)
-    }, [isInView, value, symbol])
-
-    return (
-        <span ref={ref} className="gradient-text" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 900 }}>
-            {symbol || `${count}${suffix}`}
-        </span>
-    )
-}
 
 const fadeUp = {
     hidden: { opacity: 0, y: 40, filter: 'blur(6px)' },
@@ -109,27 +80,30 @@ export default function About() {
                         </motion.div>
                     </div>
 
-                    {/* Stats with animated counters */}
+                    {/* Interest badges */}
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: '-40px' }}
                         variants={stagger}
-                        style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginTop: 64, textAlign: 'center' }}
+                        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14, marginTop: 56 }}
                     >
-                        {stats.map(({ value, suffix, symbol, label }, i) => (
+                        {INTERESTS.map(({ emoji, label, gradient }) => (
                             <motion.div
                                 key={label}
                                 variants={fadeUp}
-                                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                                whileHover={{ y: -4, borderColor: 'rgba(124,58,237,0.3)' }}
+                                transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                                whileHover={{ y: -5, scale: 1.08, borderColor: 'rgba(124,58,237,0.4)', boxShadow: '0 0 25px rgba(124,58,237,0.15)' }}
+                                whileTap={{ scale: 0.95 }}
                                 className="glass-card"
-                                style={{ padding: '24px 16px' }}
+                                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 22px', cursor: 'default' }}
                             >
-                                <Counter value={value} suffix={suffix} symbol={symbol} />
-                                <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: 8, color: 'var(--text-secondary)' }}>
+                                <span style={{ fontSize: gradient ? 28 : 20 }} className={gradient ? 'gradient-text' : undefined}>
+                                    {emoji}
+                                </span>
+                                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>
                                     {label}
-                                </div>
+                                </span>
                             </motion.div>
                         ))}
                     </motion.div>
