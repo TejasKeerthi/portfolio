@@ -68,9 +68,9 @@ export default function About() {
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                         style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 700, lineHeight: 1.15, marginBottom: 32 }}
                     >
-                        Obsessed with{' '}
-                        <span className="gradient-text">craft</span> &{' '}
-                        <span className="gradient-text">performance</span>.
+                        Driven by{' '}
+                        <span className="gradient-text">data</span> &{' '}
+                        <span className="gradient-text">algorithms</span>.
                     </motion.h2>
                 </motion.div>
 
@@ -86,9 +86,9 @@ export default function About() {
                             style={{ padding: 32 }}
                         >
                             <p style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--text-secondary)' }}>
-                                I'm a full-stack developer with a deep passion for interactive experiences,
-                                real-time graphics, and buttery-smooth interfaces. I merge engineering
-                                precision with creative vision to build products that feel alive.
+                                I'm a data science enthusiast deeply passionate about AI/ML algorithms,
+                                statistical modeling, and extracting meaningful patterns from complex datasets.
+                                I love turning raw data into actionable intelligence.
                             </p>
                         </motion.div>
 
@@ -102,9 +102,9 @@ export default function About() {
                             style={{ padding: 32 }}
                         >
                             <p style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--text-secondary)' }}>
-                                From GPU-accelerated animations to scalable backend architectures,
-                                I thrive at the intersection of art and technology. Every pixel
-                                matters. Every millisecond counts.
+                                From neural networks and NLP to computer vision and predictive analytics,
+                                I thrive at the intersection of mathematics and engineering. Every feature
+                                matters. Every epoch counts.
                             </p>
                         </motion.div>
                     </div>

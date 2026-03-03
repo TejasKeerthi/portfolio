@@ -144,24 +144,24 @@ export default function Hero() {
                     variants={fadeUp}
                     style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 24, color: 'var(--accent-light)', fontFamily: 'var(--font-mono)' }}
                 >
-                    Creative Developer
+                    Data Science & AI/ML
                 </motion.p>
 
                 <motion.h1
                     variants={fadeUp}
                     style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', fontWeight: 900, lineHeight: 0.95, letterSpacing: '-0.02em', marginBottom: 24, color: '#ffffff', textShadow: '0 2px 40px rgba(0,0,0,0.5)' }}
                 >
-                    Building{' '}
-                    <span className="gradient-text">Digital</span>
+                    Turning{' '}
+                    <span className="gradient-text">Data</span>
                     <br />
-                    Experiences
+                    Into Intelligence
                 </motion.h1>
 
                 <motion.p
                     variants={fadeUp}
                     style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', maxWidth: 560, margin: '0 auto 40px', lineHeight: 1.7, color: 'var(--text-secondary)' }}
                 >
-                    I craft high-performance, visually stunning web applications that push the boundaries of what's possible in the browser.
+                    I build intelligent systems powered by machine learning, deep learning, and data-driven insights — from predictive models to end-to-end AI pipelines.
                 </motion.p>
 
                 <motion.div variants={fadeUp} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
