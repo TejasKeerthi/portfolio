@@ -285,18 +285,10 @@ section { position: relative; }
 
 /* ── Smooth page-load entrance ── */
 @keyframes page-load {
-  0% {
-    opacity: 0;
-    transform: scale(0.98) translate3d(0, 20px, 0);
-    filter: blur(10px) brightness(1.5);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translate3d(0, 0, 0);
-    filter: blur(0) brightness(1);
-  }
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 .page-enter {
-  animation: page-load 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: transform, opacity, filter;
+  animation: page-load 1s ease-out both;
+  will-change: opacity;
 }

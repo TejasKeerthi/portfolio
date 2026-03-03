@@ -39,21 +39,28 @@ export default function App() {
     }, [])
 
     return (
-        <div className="noise-overlay page-enter" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0a0118 0%, #030014 30%, #000000 100%)' }}>
+        <>
+            {/* Fixed-position layers — must live OUTSIDE page-enter to avoid
+                will-change:transform creating a containing block that breaks
+                position:fixed */}
             <GPUChipViz />
             <CustomCursor />
             <ScrollProgress />
             <Navbar onContactClick={openContact} />
-            <Hero />
-            <DataPipelineViz />
-            <About />
-            <NeuralNetworkViz />
-            <TechGrid />
-            <Projects />
-            <MarqueeBand />
-            <Footer />
             <BongoCat />
             <ContactOverlay isOpen={contactOpen} onClose={closeContact} />
-        </div>
+
+            {/* Scrollable content */}
+            <div className="noise-overlay page-enter" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0a0118 0%, #030014 30%, #000000 100%)' }}>
+                <Hero />
+                <DataPipelineViz />
+                <About />
+                <NeuralNetworkViz />
+                <TechGrid />
+                <Projects />
+                <MarqueeBand />
+                <Footer />
+            </div>
+        </>
     )
 }
