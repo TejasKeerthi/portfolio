@@ -51,7 +51,10 @@ export default function App() {
             <ContactOverlay isOpen={contactOpen} onClose={closeContact} />
 
             {/* Scrollable content */}
-            <div className="noise-overlay page-enter" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0a0118 0%, #030014 30%, #000000 100%)' }}>
+            <div className="noise-overlay page-enter stage-shell" style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0a0118 0%, #030014 30%, #000000 100%)' }}>
+                <div className="global-aurora global-aurora-a" />
+                <div className="global-aurora global-aurora-b" />
+                <div className="global-aurora global-aurora-c" />
                 <Hero />
                 <DataPipelineViz />
                 <About />

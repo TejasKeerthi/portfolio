@@ -13,6 +13,8 @@ const FLOAT_ROT_SPEED = 0.005
 const PARALLAX_STRENGTH = 0.2
 const LERP_FACTOR = 0.025
 
+const HERO_LINES = ['Designing', 'Intelligence', 'In Motion']
+
 function Keycap({ position, emissiveColor = '#7c3aed', emissiveIntensity = 0.6 }) {
     return (
         <mesh position={position} castShadow>
@@ -29,29 +31,41 @@ function Macropad() {
     const currentRot = useRef({ x: 0, y: 0 })
 
     const keys = useMemo(() => {
-        const rows = 3, cols = 3, spacing = 0.48
+        const rows = 3
+        const cols = 3
+        const spacing = 0.48
         const ox = -((cols - 1) * spacing) / 2
         const oz = -((rows - 1) * spacing) / 2
-        const colors = ['#7c3aed','#818cf8','#a78bfa','#6d28d9','#7c3aed','#c084fc','#818cf8','#a78bfa','#6d28d9']
-        const r = []
-        for (let row = 0; row < rows; row++)
+        const colors = ['#7c3aed', '#818cf8', '#a78bfa', '#6d28d9', '#7c3aed', '#c084fc', '#818cf8', '#a78bfa', '#6d28d9']
+        const result = []
+
+        for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
                 const idx = row * cols + col
-                r.push({ pos: [ox + col * spacing, 0.18, oz + row * spacing], color: colors[idx], intensity: 0.5 + Math.random() * 0.4 })
+                result.push({
+                    pos: [ox + col * spacing, 0.18, oz + row * spacing],
+                    color: colors[idx],
+                    intensity: 0.5 + Math.random() * 0.4,
+                })
             }
-        return r
+        }
+
+        return result
     }, [])
 
     useFrame((state, delta) => {
         const t = state.clock.getElapsedTime()
         const dt = Math.min(delta, 0.05)
+
         if (groupRef.current) {
             groupRef.current.position.y = Math.sin(t * FLOAT_SPEED) * FLOAT_Y
             groupRef.current.rotation.y += FLOAT_ROT_SPEED * dt * 60
         }
-        const p = state.pointer
-        mouseTarget.current.x = p.y * PARALLAX_STRENGTH
-        mouseTarget.current.y = p.x * PARALLAX_STRENGTH
+
+        const pointer = state.pointer
+        mouseTarget.current.x = pointer.y * PARALLAX_STRENGTH
+        mouseTarget.current.y = pointer.x * PARALLAX_STRENGTH
+
         if (baseRef.current) {
             currentRot.current.x += (mouseTarget.current.x - currentRot.current.x) * LERP_FACTOR
             currentRot.current.y += (mouseTarget.current.y - currentRot.current.y) * LERP_FACTOR
@@ -63,11 +77,29 @@ function Macropad() {
     return (
         <group ref={baseRef}>
             <group ref={groupRef}>
-                <mesh castShadow receiveShadow><boxGeometry args={[2, 0.15, 1.8]} /><meshStandardMaterial color="#0a0818" roughness={0.3} metalness={0.95} /></mesh>
-                <mesh position={[0, 0.08, 0]} castShadow><boxGeometry args={[1.85, 0.06, 1.65]} /><meshStandardMaterial color="#110d24" roughness={0.4} metalness={0.9} /></mesh>
-                {keys.map((k, i) => <Keycap key={i} position={k.pos} emissiveColor={k.color} emissiveIntensity={k.intensity} />)}
-                <mesh position={[0, 0.26, -0.72]} castShadow><cylinderGeometry args={[0.15, 0.15, 0.14, 24]} /><meshStandardMaterial color="#120a30" emissive="#7c3aed" emissiveIntensity={0.3} roughness={0.2} metalness={0.95} /></mesh>
-                <mesh position={[0, 0.01, 0.92]}><boxGeometry args={[1.4, 0.02, 0.04]} /><meshStandardMaterial color="#7c3aed" emissive="#a78bfa" emissiveIntensity={1.5} toneMapped={false} /></mesh>
+                <mesh castShadow receiveShadow>
+                    <boxGeometry args={[2, 0.15, 1.8]} />
+                    <meshStandardMaterial color="#0a0818" roughness={0.3} metalness={0.95} />
+                </mesh>
+
+                <mesh position={[0, 0.08, 0]} castShadow>
+                    <boxGeometry args={[1.85, 0.06, 1.65]} />
+                    <meshStandardMaterial color="#110d24" roughness={0.4} metalness={0.9} />
+                </mesh>
+
+                {keys.map((key, i) => (
+                    <Keycap key={i} position={key.pos} emissiveColor={key.color} emissiveIntensity={key.intensity} />
+                ))}
+
+                <mesh position={[0, 0.26, -0.72]} castShadow>
+                    <cylinderGeometry args={[0.15, 0.15, 0.14, 24]} />
+                    <meshStandardMaterial color="#120a30" emissive="#7c3aed" emissiveIntensity={0.3} roughness={0.2} metalness={0.95} />
+                </mesh>
+
+                <mesh position={[0, 0.01, 0.92]}>
+                    <boxGeometry args={[1.4, 0.02, 0.04]} />
+                    <meshStandardMaterial color="#7c3aed" emissive="#a78bfa" emissiveIntensity={1.5} toneMapped={false} />
+                </mesh>
             </group>
         </group>
     )
@@ -75,49 +107,58 @@ function Macropad() {
 
 function MouseLight() {
     const ref = useRef()
-    useFrame((s) => { if (ref.current) { ref.current.position.x = s.pointer.x * 3; ref.current.position.y = 3 + s.pointer.y * 1.5; ref.current.position.z = 3 } })
+    useFrame((state) => {
+        if (!ref.current) return
+        ref.current.position.x = state.pointer.x * 3
+        ref.current.position.y = 3 + state.pointer.y * 1.5
+        ref.current.position.z = 3
+    })
     return <pointLight ref={ref} intensity={25} color="#c084fc" distance={10} decay={2} />
 }
 
 function Particles({ count = 60 }) {
     const positions = useMemo(() => {
         const p = new Float32Array(count * 3)
-        for (let i = 0; i < count; i++) { p[i*3]=(Math.random()-0.5)*20; p[i*3+1]=(Math.random()-0.5)*20; p[i*3+2]=(Math.random()-0.5)*20 }
+        for (let i = 0; i < count; i++) {
+            p[i * 3] = (Math.random() - 0.5) * 20
+            p[i * 3 + 1] = (Math.random() - 0.5) * 20
+            p[i * 3 + 2] = (Math.random() - 0.5) * 20
+        }
         return p
     }, [count])
+
     const ref = useRef()
-    useFrame((_, d) => { if (ref.current) ref.current.rotation.y += 0.004 * Math.min(d, 0.05) * 60 })
+    useFrame((_, delta) => {
+        if (!ref.current) return
+        ref.current.rotation.y += 0.004 * Math.min(delta, 0.05) * 60
+    })
+
     return (
         <points ref={ref}>
-            <bufferGeometry><bufferAttribute attach="attributes-position" array={positions} count={count} itemSize={3} /></bufferGeometry>
+            <bufferGeometry>
+                <bufferAttribute attach="attributes-position" array={positions} count={count} itemSize={3} />
+            </bufferGeometry>
             <pointsMaterial size={0.03} color="#a78bfa" transparent opacity={0.3} sizeAttenuation />
         </points>
     )
 }
 
-/* ── Stagger container ── */
-const stagger = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
-}
-const fadeUp = {
-    hidden: { opacity: 0, y: 30, filter: 'blur(8px)', rotateX: 15 },
-    visible: { opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+const topLineAnim = {
+    hidden: { opacity: 0, y: 26, filter: 'blur(7px)' },
+    visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
 }
 
 export default function Hero() {
     return (
-        <section id="hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-            {/* Dark overlay to prevent white wash */}
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(3,0,20,0.4) 0%, rgba(3,0,20,0.85) 70%)', pointerEvents: 'none', zIndex: 1 }} />
+        <section id="hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', paddingTop: 92 }}>
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(3,0,20,0.28) 0%, rgba(3,0,20,0.86) 72%)', pointerEvents: 'none', zIndex: 1 }} />
 
-            {/* Glow orbs */}
             <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 2 }}>
-                <div className="animate-pulse-glow parallax-slow" style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 65%)' }} />
-                <div className="animate-pulse-glow parallax-fast" style={{ position: 'absolute', bottom: '20%', left: '30%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 65%)', animationDelay: '2.5s' }} />
+                <div className="hero-orb hero-orb-a" />
+                <div className="hero-orb hero-orb-b" />
+                <div className="hero-orb hero-orb-c" />
             </div>
 
-            {/* 3D Canvas */}
             <div className="hero-canvas">
                 <Canvas shadows camera={{ position: [0, 2.5, 5.5], fov: 40 }} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }}>
                     <color attach="background" args={['transparent']} />
@@ -133,75 +174,110 @@ export default function Hero() {
                 </Canvas>
             </div>
 
-            {/* Text overlay */}
             <motion.div
-                variants={stagger}
                 initial="hidden"
                 animate="visible"
-                style={{ position: 'relative', zIndex: 10, textAlign: 'center', width: '100%', maxWidth: 1200, margin: '0 auto', padding: '0 24px', perspective: '1000px' }}
+                style={{ position: 'relative', zIndex: 10, textAlign: 'center', width: '100%', maxWidth: 1240, margin: '0 auto', padding: '0 24px', perspective: '1000px' }}
             >
                 <motion.p
-                    variants={fadeUp}
-                    style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 24, color: 'var(--accent-light)', fontFamily: 'var(--font-mono)' }}
+                    variants={topLineAnim}
+                    style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.34em', textTransform: 'uppercase', marginBottom: 22, color: 'rgba(199, 179, 244, 0.95)', fontFamily: 'var(--font-mono)' }}
                 >
-                    Data Science & AI/ML
+                    Data Science • AI Systems • Creative Engineering
                 </motion.p>
 
-                <motion.h1
-                    variants={fadeUp}
-                    style={{ fontSize: 'clamp(3rem, 8vw, 7rem)', fontWeight: 900, lineHeight: 0.95, letterSpacing: '-0.02em', marginBottom: 24, color: '#ffffff', textShadow: '0 2px 40px rgba(0,0,0,0.5)' }}
-                >
-                    Turning{' '}
-                    <span className="gradient-text">Data</span>
-                    <br />
-                    Into Intelligence
-                </motion.h1>
+                <div style={{ display: 'grid', gap: 6, marginBottom: 24 }}>
+                    {HERO_LINES.map((line, index) => (
+                        <div key={line} className="hero-line-wrap">
+                            <motion.h1
+                                initial={{ y: 110, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ duration: 1, delay: 0.12 + index * 0.12, ease: [0.16, 1, 0.3, 1] }}
+                                className={index === 1 ? 'hero-title hero-title-gradient' : 'hero-title'}
+                            >
+                                {line}
+                            </motion.h1>
+                        </div>
+                    ))}
+                </div>
 
                 <motion.p
-                    variants={fadeUp}
-                    style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', maxWidth: 560, margin: '0 auto 40px', lineHeight: 1.7, color: 'var(--text-secondary)' }}
+                    variants={topLineAnim}
+                    transition={{ delay: 0.28 }}
+                    style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', maxWidth: 670, margin: '0 auto 34px', lineHeight: 1.75, color: 'rgba(188, 179, 223, 0.9)' }}
                 >
-                    I build intelligent systems powered by machine learning, deep learning, and data-driven insights — from predictive models to end-to-end AI pipelines.
+                    A cinematic portfolio where machine learning, design systems, and interaction design converge into one immersive narrative.
                 </motion.p>
 
-                <motion.div variants={fadeUp} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+                <motion.div
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.42, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 26 }}
+                >
                     <motion.a
                         href="#projects"
-                        whileHover={{ scale: 1.06, boxShadow: '0 0 40px rgba(124,58,237,0.5)' }}
+                        whileHover={{ y: -3, scale: 1.02 }}
                         whileTap={{ scale: 0.96 }}
-                        style={{ padding: '14px 32px', borderRadius: 999, fontSize: 14, fontWeight: 600, background: 'linear-gradient(135deg, #7c3aed, #9333ea)', color: '#fff', textDecoration: 'none', boxShadow: '0 0 30px rgba(124,58,237,0.3)' }}
+                        className="hero-cta hero-cta-primary"
                     >
-                        View Work
+                        Explore Work
                     </motion.a>
                     <motion.a
                         href="#about"
-                        whileHover={{ scale: 1.06, backgroundColor: 'rgba(255,255,255,0.08)' }}
+                        whileHover={{ y: -3, scale: 1.02 }}
                         whileTap={{ scale: 0.96 }}
-                        className="glass-card"
-                        style={{ padding: '14px 32px', borderRadius: 999, fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', textDecoration: 'none' }}
+                        className="hero-cta hero-cta-secondary"
                     >
-                        About Me
+                        Story & Process
                     </motion.a>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.56, ease: [0.16, 1, 0.3, 1] }}
+                    className="hero-meta-grid"
+                >
+                    {[
+                        { label: 'Realtime Systems', value: 'LLM + CV + Pipelines' },
+                        { label: 'Design Signature', value: 'Cinematic Minimalism' },
+                        { label: 'Interaction Target', value: 'Smooth 60fps motion' },
+                    ].map((item) => (
+                        <motion.div
+                            key={item.label}
+                            whileHover={{ y: -4, borderColor: 'rgba(196,132,252,0.4)' }}
+                            transition={{ type: 'spring', stiffness: 250, damping: 20 }}
+                            className="hero-meta-card"
+                        >
+                            <div style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(197, 182, 242, 0.72)', fontFamily: 'var(--font-mono)' }}>
+                                {item.label}
+                            </div>
+                            <div style={{ marginTop: 6, fontSize: 13, color: 'rgba(246, 240, 255, 0.95)' }}>
+                                {item.value}
+                            </div>
+                        </motion.div>
+                    ))}
                 </motion.div>
             </motion.div>
 
-            {/* Scroll indicator */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.5, duration: 1 }}
-                style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}
+                style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', zIndex: 12, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}
             >
-                <span style={{ fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>Scroll</span>
+                <span style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(178, 166, 214, 0.85)', fontFamily: 'var(--font-mono)' }}>
+                    Scroll
+                </span>
                 <motion.div
-                    animate={{ y: [0, 8, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                    style={{ width: 1, height: 24, background: 'linear-gradient(to bottom, var(--accent-light), transparent)' }}
+                    animate={{ y: [0, 9, 0] }}
+                    transition={{ duration: 1.7, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ width: 1, height: 26, background: 'linear-gradient(to bottom, rgba(196,132,252,0.95), transparent)' }}
                 />
             </motion.div>
 
-            {/* Bottom fade */}
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 160, background: 'linear-gradient(to top, var(--bg-primary), transparent)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 180, background: 'linear-gradient(to top, var(--bg-primary), transparent)', pointerEvents: 'none' }} />
         </section>
     )
 }

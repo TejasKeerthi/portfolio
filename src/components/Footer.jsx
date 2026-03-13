@@ -10,36 +10,63 @@ export default function Footer() {
     const year = new Date().getFullYear()
 
     return (
-        <footer style={{ position: 'relative', padding: '80px 0 40px', background: 'var(--bg-primary)' }}>
-            {/* Top gradient line */}
-            <div className="section-divider" style={{ marginBottom: 64 }} />
+        <footer style={{ position: 'relative', padding: '96px 0 44px', overflow: 'hidden', background: 'var(--bg-primary)' }}>
+            <motion.div
+                aria-hidden
+                initial={{ opacity: 0, scale: 0.86 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                style={{
+                    position: 'absolute',
+                    top: -200,
+                    left: '50%',
+                    width: 620,
+                    height: 620,
+                    transform: 'translateX(-50%)',
+                    borderRadius: '50%',
+                    pointerEvents: 'none',
+                    background: 'radial-gradient(circle, rgba(124,58,237,0.2), rgba(124,58,237,0))',
+                }}
+            />
 
-            <div className="container-main" style={{ textAlign: 'center' }}>
-                {/* Big signature text */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+            <div className="container-main" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+                <div className="section-divider" style={{ marginBottom: 60 }} />
+
+                <motion.p
+                    initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+                    whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    style={{
+                        fontSize: 'clamp(2.1rem, 5.4vw, 4.8rem)',
+                        lineHeight: 1.05,
+                        fontWeight: 700,
+                        marginBottom: 22,
+                        fontFamily: 'var(--font-display)',
+                    }}
                 >
-                    <p style={{
-                        fontSize: 'clamp(2rem, 5vw, 4rem)',
-                        fontWeight: 800,
-                        lineHeight: 1.1,
-                        marginBottom: 24,
-                    }}>
-                        Let's build something{' '}
-                        <span className="gradient-text">extraordinary</span>.
-                    </p>
-                </motion.div>
+                    Building digital experiences
+                    <br />
+                    that feel <span className="gradient-text">inevitable</span>.
+                </motion.p>
 
-                {/* Social links */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
+                <motion.p
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.2, duration: 0.6 }}
-                    style={{ display: 'flex', justifyContent: 'center', gap: 24, marginBottom: 48 }}
+                    transition={{ duration: 0.7, delay: 0.1 }}
+                    style={{ maxWidth: 620, margin: '0 auto 30px', color: 'rgba(188, 180, 222, 0.82)', fontSize: 15, lineHeight: 1.75 }}
+                >
+                    Open for ambitious AI products, interactive web systems, and design-forward engineering collaborations.
+                </motion.p>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.75, delay: 0.18 }}
+                    style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 44 }}
                 >
                     {SOCIALS.map(({ label, href }) => (
                         <motion.a
@@ -47,18 +74,18 @@ export default function Footer() {
                             href={href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            whileHover={{ y: -3, color: '#c084fc' }}
+                            whileHover={{ y: -3, borderColor: 'rgba(196,132,252,0.55)', color: '#ffffff' }}
                             style={{
-                                fontSize: 13,
-                                fontWeight: 500,
+                                borderRadius: 999,
+                                border: '1px solid rgba(255,255,255,0.16)',
+                                background: 'linear-gradient(140deg, rgba(14,10,38,0.7), rgba(6,4,20,0.55))',
+                                textDecoration: 'none',
+                                color: 'rgba(219, 212, 247, 0.9)',
+                                padding: '10px 18px',
+                                fontSize: 12,
                                 letterSpacing: '0.1em',
                                 textTransform: 'uppercase',
-                                color: 'var(--text-secondary)',
-                                textDecoration: 'none',
-                                padding: '8px 16px',
-                                borderRadius: 999,
-                                border: '1px solid rgba(255,255,255,0.06)',
-                                background: 'rgba(255,255,255,0.02)',
+                                fontFamily: 'var(--font-mono)',
                             }}
                         >
                             {label}
@@ -66,21 +93,20 @@ export default function Footer() {
                     ))}
                 </motion.div>
 
-                {/* Bottom line */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.3, duration: 0.6 }}
-                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}
+                    transition={{ delay: 0.2, duration: 0.6 }}
+                    style={{ display: 'grid', justifyItems: 'center', gap: 10 }}
                 >
-                    <p style={{ fontSize: 12, color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
-                        Designed & built by <span style={{ color: 'var(--accent-light)' }}>Tejas</span> — {year}
+                    <p style={{ fontSize: 12, color: 'rgba(166, 155, 200, 0.85)', fontFamily: 'var(--font-mono)' }}>
+                        Designed and engineered by <span style={{ color: 'rgba(206, 176, 252, 0.95)' }}>Tejas</span> — {year}
                     </p>
                     <motion.div
-                        animate={{ opacity: [0.3, 0.8, 0.3] }}
+                        animate={{ opacity: [0.25, 0.85, 0.25], scale: [1, 1.35, 1] }}
                         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                        style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--accent)' }}
+                        style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(196,132,252,0.95)' }}
                     />
                 </motion.div>
             </div>
