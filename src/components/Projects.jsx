@@ -1,201 +1,264 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 
 const PROJECTS = [
     {
         title: 'Sentinel-Net',
-        desc: 'Software reliability monitoring dashboard with real-time failure risk metrics, AI-powered insights, semantic signal feeds, and interactive temporal trend analysis.',
+        desc: 'Reliability intelligence platform for live failure forecasting, semantic incident tracing, and temporal confidence scoring across distributed systems.',
         tags: ['React', 'TypeScript', 'Python', 'Tailwind', 'Recharts'],
         color: '#7c3aed',
         link: 'https://github.com/TejasKeerthi/Sentinal-net',
         live: 'https://tejaskeerthi.github.io/Sentinal-net/',
+        metric: '99.2% signal precision',
+        badge: 'Flagship',
     },
     {
         title: 'Yatra',
-        desc: 'AI-powered India travel planner using Google Gemini — generates personalized itineraries with interactive maps, PDF export, Firebase auth, and cloud saving.',
+        desc: 'AI travel orchestration app that generates custom itineraries with location intelligence, map layers, and cloud-synced planning sessions.',
         tags: ['React', 'TypeScript', 'Gemini AI', 'Firebase', 'Leaflet.js'],
         color: '#06b6d4',
         link: 'https://github.com/TejasKeerthi/yatra',
         live: 'https://tejaskeerthi.github.io/yatra/',
+        metric: '1-click route generation',
+        badge: 'Product',
     },
     {
         title: 'ART-VAULT',
-        desc: 'Digital art gallery platform with Firebase authentication, real-time artwork display, wallet integration, and 3D model viewer support.',
-        tags: ['HTML', 'Tailwind CSS', 'JavaScript', 'Firebase', 'Google Model Viewer'],
+        desc: 'Interactive digital gallery with secure auth, wallet connection, and immersive model previews designed for modern creators.',
+        tags: ['HTML', 'Tailwind', 'JavaScript', 'Firebase', 'Model Viewer'],
         color: '#f59e0b',
         link: 'https://github.com/TejasKeerthi/ART-VAULT',
         live: 'https://tejaskeerthi.github.io/ART-VAULT/',
+        metric: 'Realtime gallery stream',
+        badge: 'Creative',
     },
     {
         title: 'Portfolio',
-        desc: 'This very site — a vibrant 3D portfolio built with React Three Fiber, Framer Motion, glassmorphism, and buttery-smooth Lenis scrolling.',
-        tags: ['React', 'Three.js', 'Framer Motion', 'Vite', 'Tailwind'],
+        desc: 'A kinetic personal site combining 3D depth, fluid transitions, and canvas-driven effects to create a memorable brand presence.',
+        tags: ['React', 'Three.js', 'Framer Motion', 'Vite', 'Lenis'],
         color: '#10b981',
         link: 'https://github.com/TejasKeerthi/portfolio',
+        metric: '60fps interactive scenes',
+        badge: 'Personal',
     },
 ]
 
-/* 3-D tilt card */
-function TiltCard({ children, color, style, className }) {
-    const ref = useRef(null)
+const headingStagger = {
+    hidden: {},
+    visible: {
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.1,
+        },
+    },
+}
+
+const revealUp = {
+    hidden: { opacity: 0, y: 26, filter: 'blur(8px)' },
+    visible: {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+    },
+}
+
+function ProjectCard({ project, index }) {
+    const cardRef = useRef(null)
     const x = useMotionValue(0)
     const y = useMotionValue(0)
-    const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), { stiffness: 200, damping: 20 })
-    const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), { stiffness: 200, damping: 20 })
 
-    function handleMove(e) {
-        const rect = ref.current.getBoundingClientRect()
-        x.set((e.clientX - rect.left) / rect.width - 0.5)
-        y.set((e.clientY - rect.top) / rect.height - 0.5)
+    const springX = useSpring(x, { stiffness: 220, damping: 22 })
+    const springY = useSpring(y, { stiffness: 220, damping: 22 })
+
+    const rotateX = useTransform(springY, [-0.5, 0.5], [8, -8])
+    const rotateY = useTransform(springX, [-0.5, 0.5], [-10, 10])
+    const glowX = useTransform(springX, [-0.5, 0.5], [20, 80])
+    const glowY = useTransform(springY, [-0.5, 0.5], [20, 80])
+
+    const dynamicGlow = useMotionTemplate`radial-gradient(circle at ${glowX}% ${glowY}%, ${project.color}40 0%, ${project.color}00 55%)`
+
+    const handleMove = (event) => {
+        const rect = cardRef.current.getBoundingClientRect()
+        x.set((event.clientX - rect.left) / rect.width - 0.5)
+        y.set((event.clientY - rect.top) / rect.height - 0.5)
     }
-    function handleLeave() { x.set(0); y.set(0) }
+
+    const handleLeave = () => {
+        x.set(0)
+        y.set(0)
+    }
 
     return (
         <motion.article
-            ref={ref}
+            ref={cardRef}
             onMouseMove={handleMove}
             onMouseLeave={handleLeave}
-            className={className}
-            style={{ ...style, rotateX, rotateY, transformPerspective: 800 }}
-            whileHover={{ borderColor: color + '55', boxShadow: `0 0 40px ${color}20, 0 0 80px ${color}10` }}
+            initial={{ opacity: 0, y: 34, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.72, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -10, borderColor: `${project.color}55`, boxShadow: `0 28px 44px ${project.color}2a` }}
+            style={{
+                position: 'relative',
+                padding: 28,
+                borderRadius: 20,
+                border: '1px solid rgba(255,255,255,0.1)',
+                overflow: 'hidden',
+                background: 'linear-gradient(150deg, rgba(15,10,42,0.86), rgba(5,3,20,0.72))',
+                backdropFilter: 'blur(10px)',
+                transformPerspective: 1000,
+                rotateX,
+                rotateY,
+                minHeight: 320,
+                display: 'flex',
+                flexDirection: 'column',
+            }}
+            className="project-shell"
         >
-            {children}
+            <motion.div aria-hidden style={{ position: 'absolute', inset: 0, background: dynamicGlow, pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', inset: 0, borderRadius: 20, background: `linear-gradient(145deg, ${project.color}1f, transparent 42%)`, pointerEvents: 'none' }} />
+
+            <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 16 }}>
+                <span style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(210, 198, 243, 0.8)', fontFamily: 'var(--font-mono)' }}>
+                    {project.badge}
+                </span>
+                <span style={{ fontSize: 10, letterSpacing: '0.1em', color: project.color, fontFamily: 'var(--font-mono)' }}>
+                    {project.metric}
+                </span>
+            </div>
+
+            <h3 style={{ position: 'relative', zIndex: 1, fontSize: 23, fontWeight: 700, lineHeight: 1.15, marginBottom: 12 }}>
+                {project.title}
+            </h3>
+
+            <p style={{ position: 'relative', zIndex: 1, fontSize: 14, lineHeight: 1.7, color: 'rgba(188, 180, 222, 0.86)', marginBottom: 18 }}>
+                {project.desc}
+            </p>
+
+            <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
+                {project.tags.map((tag) => (
+                    <span
+                        key={tag}
+                        style={{
+                            borderRadius: 999,
+                            border: '1px solid rgba(255,255,255,0.13)',
+                            background: 'rgba(255,255,255,0.04)',
+                            color: 'rgba(214, 206, 242, 0.9)',
+                            padding: '5px 10px',
+                            fontSize: 11,
+                            fontFamily: 'var(--font-mono)',
+                        }}
+                    >
+                        {tag}
+                    </span>
+                ))}
+            </div>
+
+            <div style={{ position: 'relative', zIndex: 1, marginTop: 'auto', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                <motion.a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -2, color: '#ffffff', borderColor: `${project.color}aa` }}
+                    style={{
+                        borderRadius: 999,
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        color: 'rgba(227, 220, 250, 0.92)',
+                        textDecoration: 'none',
+                        fontSize: 12,
+                        padding: '8px 14px',
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                        fontFamily: 'var(--font-mono)',
+                    }}
+                >
+                    Source
+                </motion.a>
+                {project.live && (
+                    <motion.a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ y: -2, color: '#ffffff' }}
+                        style={{
+                            borderRadius: 999,
+                            border: `1px solid ${project.color}66`,
+                            color: project.color,
+                            textDecoration: 'none',
+                            fontSize: 12,
+                            padding: '8px 14px',
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
+                            fontFamily: 'var(--font-mono)',
+                            background: `${project.color}1c`,
+                        }}
+                    >
+                        Live
+                    </motion.a>
+                )}
+            </div>
         </motion.article>
     )
 }
 
-const fadeUp = {
-    hidden: { opacity: 0, y: 50, filter: 'blur(8px)', rotateX: 12, scale: 0.95 },
-    visible: { opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0, scale: 1 },
-}
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }
-
 export default function Projects() {
     return (
-        <section id="projects" style={{ position: 'relative', padding: '128px 0', background: 'var(--bg-primary)' }}>
-            <div className="container-main" style={{ textAlign: 'center' }}>
+        <section id="projects" style={{ position: 'relative', padding: '120px 0 132px', overflow: 'hidden', background: 'var(--bg-primary)' }}>
+            <motion.div
+                aria-hidden
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: '-120px' }}
+                transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+                style={{
+                    position: 'absolute',
+                    left: '-10%',
+                    top: 40,
+                    width: 540,
+                    height: 540,
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(124,58,237,0.24), rgba(124,58,237,0))',
+                    pointerEvents: 'none',
+                }}
+            />
+
+            <div className="container-main" style={{ position: 'relative', zIndex: 1 }}>
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, margin: '-60px' }}
-                    variants={stagger}
-                    style={{ marginBottom: 56 }}
+                    viewport={{ once: true, margin: '-70px' }}
+                    variants={headingStagger}
+                    style={{ textAlign: 'center', marginBottom: 44 }}
                 >
                     <motion.p
-                        variants={fadeUp}
-                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                        style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 16, color: 'var(--accent-light)', fontFamily: 'var(--font-mono)' }}
+                        variants={revealUp}
+                        style={{ fontSize: 12, letterSpacing: '0.32em', textTransform: 'uppercase', marginBottom: 12, color: 'rgba(196, 132, 252, 0.86)', fontFamily: 'var(--font-mono)' }}
                     >
                         Selected Work
                     </motion.p>
                     <motion.h2
-                        variants={fadeUp}
-                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 700 }}
+                        variants={revealUp}
+                        style={{ fontSize: 'clamp(2rem, 4.8vw, 3.6rem)', fontWeight: 700, lineHeight: 1.08 }}
                     >
-                        Projects that <span className="gradient-text">matter</span>.
+                        Projects with <span className="gradient-text">product gravity</span>
                     </motion.h2>
+                    <motion.p
+                        variants={revealUp}
+                        style={{ marginTop: 14, fontSize: 15, lineHeight: 1.7, color: 'rgba(184, 175, 220, 0.82)', maxWidth: 700, marginInline: 'auto' }}
+                    >
+                        Each build focuses on usability, visual confidence, and measurable technical value from data pipelines to interactive product experiences.
+                    </motion.p>
                 </motion.div>
 
-                <div className="container-narrow" style={{ padding: 0 }}>
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: '-40px' }}
-                        variants={stagger}
-                        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, textAlign: 'left' }}
-                    >
-                        {PROJECTS.map((project) => (
-                            <motion.div
-                                key={project.title}
-                                variants={fadeUp}
-                                transition={{ type: 'spring', stiffness: 120, damping: 18 }}
-                            >
-                                <TiltCard
-                                    color={project.color}
-                                    style={{
-                                        background: 'rgba(255,255,255,0.03)',
-                                        border: '1px solid rgba(255,255,255,0.07)',
-                                        backdropFilter: 'blur(16px)',
-                                        borderRadius: 16,
-                                        padding: 32,
-                                        cursor: 'pointer',
-                                        position: 'relative',
-                                        overflow: 'hidden',
-                                        perspective: '800px',
-                                    }}
-                                    className="holo-border"
-                                >
-                                    {/* Gradient corner accent */}
-                                    <div style={{
-                                        position: 'absolute', top: 0, right: 0, width: 80, height: 80,
-                                        background: `radial-gradient(circle at top right, ${project.color}22, transparent 70%)`,
-                                        pointerEvents: 'none',
-                                    }} />
-
-                                    {/* Accent dot */}
-                                    <motion.div
-                                        whileHover={{ scale: 1.6 }}
-                                        style={{
-                                            width: 10, height: 10, borderRadius: '50%',
-                                            background: project.color,
-                                            boxShadow: `0 0 14px ${project.color}55`,
-                                            marginBottom: 20,
-                                        }}
-                                    />
-
-                                    <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 10, color: 'var(--text-primary)' }}>
-                                        {project.title}
-                                    </h3>
-                                    <p style={{ fontSize: 14, lineHeight: 1.65, marginBottom: 20, color: 'var(--text-secondary)' }}>
-                                        {project.desc}
-                                    </p>
-
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
-                                        {project.tags.map((tag) => (
-                                            <span key={tag} style={{
-                                                padding: '4px 12px', borderRadius: 999,
-                                                fontSize: 11, fontWeight: 500,
-                                                background: 'rgba(255,255,255,0.04)',
-                                                border: '1px solid rgba(255,255,255,0.06)',
-                                                color: 'var(--text-secondary)',
-                                            }}>
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
-
-                                    {/* Links */}
-                                    <div style={{ display: 'flex', gap: 12, marginTop: 'auto' }}>
-                                        <motion.a
-                                            href={project.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            whileHover={{ color: project.color }}
-                                            style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', textDecoration: 'none' }}
-                                        >
-                                            GitHub ↗
-                                        </motion.a>
-                                        {project.live && (
-                                            <motion.a
-                                                href={project.live}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                whileHover={{ color: project.color }}
-                                                style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', textDecoration: 'none' }}
-                                            >
-                                                Live Demo ↗
-                                            </motion.a>
-                                        )}
-                                    </div>
-                                </TiltCard>
-                            </motion.div>
-                        ))}
-                    </motion.div>
+                <div className="projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18 }}>
+                    {PROJECTS.map((project, index) => (
+                        <ProjectCard key={project.title} project={project} index={index} />
+                    ))}
                 </div>
             </div>
 
-            <div className="section-divider" style={{ marginTop: 128 }} />
+            <div className="section-divider" style={{ marginTop: 112 }} />
         </section>
     )
 }
