@@ -8,11 +8,26 @@ import { useEffect, useRef, useCallback } from 'react'
 export default function GPUChipViz() {
     const canvasRef = useRef(null)
     const raf = useRef(null)
+    const lastFrame = useRef(0)
+    const pageVisible = useRef(true)
     const mouse = useRef({ x: -9999, y: -9999 })
 
     const draw = useCallback(() => {
         const canvas = canvasRef.current
         if (!canvas) return
+
+        if (!pageVisible.current) {
+            raf.current = requestAnimationFrame(draw)
+            return
+        }
+
+        const now = performance.now()
+        if (now - lastFrame.current < 33) {
+            raf.current = requestAnimationFrame(draw)
+            return
+        }
+        lastFrame.current = now
+
         const ctx = canvas.getContext('2d')
         const W = canvas.width
         const H = canvas.height
@@ -31,7 +46,7 @@ export default function GPUChipViz() {
         const top = cy - chipH / 2
 
         // Die outline
-        ctx.strokeStyle = 'rgba(124, 58, 237, 0.08)'
+        ctx.strokeStyle = 'rgba(215, 227, 246, 0.08)'
         ctx.lineWidth = 1
         ctx.strokeRect(left, top, chipW, chipH)
 
@@ -40,7 +55,7 @@ export default function GPUChipViz() {
         const il = left + pad, it = top + pad
         const iw = chipW - pad * 2, ih = chipH - pad * 2
 
-        ctx.strokeStyle = 'rgba(124, 58, 237, 0.05)'
+        ctx.strokeStyle = 'rgba(202, 215, 236, 0.05)'
         ctx.strokeRect(il, it, iw, ih)
 
         // ── Processing cores grid ──
@@ -65,18 +80,18 @@ export default function GPUChipViz() {
 
                 // Core cell
                 const inset = 2
-                ctx.fillStyle = `rgba(124, 58, 237, ${0.02 + active * 0.08})`
+                ctx.fillStyle = `rgba(206, 220, 241, ${0.02 + active * 0.08})`
                 ctx.fillRect(x + inset, y + inset, cellW - inset * 2, cellH - inset * 2)
 
-                ctx.strokeStyle = `rgba(124, 58, 237, ${0.04 + active * 0.12})`
+                ctx.strokeStyle = `rgba(199, 214, 237, ${0.04 + active * 0.12})`
                 ctx.lineWidth = 0.5
                 ctx.strokeRect(x + inset, y + inset, cellW - inset * 2, cellH - inset * 2)
 
                 // Active core glow
                 if (active > 0.15) {
                     const g = ctx.createRadialGradient(cmx, cmy, 0, cmx, cmy, cellW * 0.7)
-                    g.addColorStop(0, `rgba(167, 139, 250, ${active * 0.12})`)
-                    g.addColorStop(1, 'rgba(167, 139, 250, 0)')
+                    g.addColorStop(0, `rgba(223, 233, 248, ${active * 0.12})`)
+                    g.addColorStop(1, 'rgba(223, 233, 248, 0)')
                     ctx.fillStyle = g
                     ctx.fillRect(x, y, cellW, cellH)
                 }
@@ -89,7 +104,7 @@ export default function GPUChipViz() {
                         const dy = cmy
                         ctx.beginPath()
                         ctx.arc(dx, dy, 1.2, 0, Math.PI * 2)
-                        ctx.fillStyle = `rgba(196, 132, 252, ${active * 0.6})`
+                        ctx.fillStyle = `rgba(236, 244, 255, ${active * 0.6})`
                         ctx.fill()
                     }
                 }
@@ -104,7 +119,7 @@ export default function GPUChipViz() {
             ctx.beginPath()
             ctx.moveTo(il, y)
             ctx.lineTo(il + iw, y)
-            ctx.strokeStyle = `rgba(124, 58, 237, ${busAlpha})`
+            ctx.strokeStyle = `rgba(197, 211, 233, ${busAlpha})`
             ctx.lineWidth = 0.5
             ctx.stroke()
         }
@@ -114,7 +129,7 @@ export default function GPUChipViz() {
             ctx.beginPath()
             ctx.moveTo(x, it)
             ctx.lineTo(x, it + ih)
-            ctx.strokeStyle = `rgba(124, 58, 237, ${busAlpha})`
+            ctx.strokeStyle = `rgba(197, 211, 233, ${busAlpha})`
             ctx.lineWidth = 0.5
             ctx.stroke()
         }
@@ -133,9 +148,9 @@ export default function GPUChipViz() {
                 const len = 15 + Math.sin(t + i) * 8
 
                 const grad = ctx.createLinearGradient(x - len, y, x + len, y)
-                grad.addColorStop(0, 'rgba(196, 132, 252, 0)')
-                grad.addColorStop(0.5, `rgba(196, 132, 252, ${0.3 + Math.sin(t * 2 + i) * 0.15})`)
-                grad.addColorStop(1, 'rgba(196, 132, 252, 0)')
+                grad.addColorStop(0, 'rgba(226, 236, 250, 0)')
+                grad.addColorStop(0.5, `rgba(226, 236, 250, ${0.3 + Math.sin(t * 2 + i) * 0.15})`)
+                grad.addColorStop(1, 'rgba(226, 236, 250, 0)')
                 ctx.beginPath()
                 ctx.moveTo(x - len, y)
                 ctx.lineTo(x + len, y)
@@ -149,9 +164,9 @@ export default function GPUChipViz() {
                 const len = 15 + Math.cos(t + i) * 8
 
                 const grad = ctx.createLinearGradient(x, y - len, x, y + len)
-                grad.addColorStop(0, 'rgba(129, 140, 248, 0)')
-                grad.addColorStop(0.5, `rgba(129, 140, 248, ${0.3 + Math.cos(t * 2 + i) * 0.15})`)
-                grad.addColorStop(1, 'rgba(129, 140, 248, 0)')
+                grad.addColorStop(0, 'rgba(159, 182, 215, 0)')
+                grad.addColorStop(0.5, `rgba(159, 182, 215, ${0.3 + Math.cos(t * 2 + i) * 0.15})`)
+                grad.addColorStop(1, 'rgba(159, 182, 215, 0)')
                 ctx.beginPath()
                 ctx.moveTo(x, y - len)
                 ctx.lineTo(x, y + len)
@@ -170,22 +185,22 @@ export default function GPUChipViz() {
             const active = Math.sin(t * 2 + i * 0.5) * 0.5 + 0.5
 
             // Top memory
-            ctx.fillStyle = `rgba(99, 102, 241, ${0.03 + active * 0.06})`
+            ctx.fillStyle = `rgba(159, 182, 215, ${0.03 + active * 0.06})`
             ctx.fillRect(x + 1, top + 3, w, memH)
-            ctx.strokeStyle = `rgba(99, 102, 241, ${0.06 + active * 0.08})`
+            ctx.strokeStyle = `rgba(159, 182, 215, ${0.06 + active * 0.08})`
             ctx.lineWidth = 0.5
             ctx.strokeRect(x + 1, top + 3, w, memH)
 
             // Bottom memory
-            ctx.fillStyle = `rgba(99, 102, 241, ${0.03 + active * 0.06})`
+            ctx.fillStyle = `rgba(159, 182, 215, ${0.03 + active * 0.06})`
             ctx.fillRect(x + 1, top + chipH - memH - 3, w, memH)
-            ctx.strokeStyle = `rgba(99, 102, 241, ${0.06 + active * 0.08})`
+            ctx.strokeStyle = `rgba(159, 182, 215, ${0.06 + active * 0.08})`
             ctx.strokeRect(x + 1, top + chipH - memH - 3, w, memH)
         }
 
         // ── Corner labels ──
         ctx.font = '9px "JetBrains Mono", monospace'
-        ctx.fillStyle = 'rgba(124, 58, 237, 0.12)'
+        ctx.fillStyle = 'rgba(198, 212, 232, 0.16)'
         ctx.textAlign = 'left'
         ctx.fillText('CUDA CORES', il + 4, it + 12)
         ctx.textAlign = 'right'
@@ -207,7 +222,7 @@ export default function GPUChipViz() {
             ctx.beginPath()
             ctx.moveTo(left - pinLen, y)
             ctx.lineTo(left, y)
-            ctx.strokeStyle = `rgba(124, 58, 237, ${pinAlpha})`
+            ctx.strokeStyle = `rgba(196, 210, 231, ${pinAlpha})`
             ctx.lineWidth = 1
             ctx.stroke()
 
@@ -215,7 +230,7 @@ export default function GPUChipViz() {
             ctx.beginPath()
             ctx.moveTo(left + chipW, y)
             ctx.lineTo(left + chipW + pinLen, y)
-            ctx.strokeStyle = `rgba(124, 58, 237, ${pinAlpha})`
+            ctx.strokeStyle = `rgba(196, 210, 231, ${pinAlpha})`
             ctx.stroke()
         }
 
@@ -237,13 +252,18 @@ export default function GPUChipViz() {
             mouse.current.x = e.clientX
             mouse.current.y = e.clientY
         }
+        const onVisibility = () => {
+            pageVisible.current = !document.hidden
+        }
         window.addEventListener('mousemove', move, { passive: true })
+        document.addEventListener('visibilitychange', onVisibility)
 
         raf.current = requestAnimationFrame(draw)
 
         return () => {
             window.removeEventListener('resize', resize)
             window.removeEventListener('mousemove', move)
+            document.removeEventListener('visibilitychange', onVisibility)
             if (raf.current) cancelAnimationFrame(raf.current)
         }
     }, [draw])

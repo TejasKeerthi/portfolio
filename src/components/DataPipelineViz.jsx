@@ -29,11 +29,12 @@ const cardReveal = {
     },
 }
 
-export default function DataPipelineViz() {
+export default function DataPipelineViz({ performanceMode = 'high' }) {
     const canvasRef = useRef(null)
     const containerRef = useRef(null)
     const raf = useRef(null)
     const dprRef = useRef(1)
+    const lastFrame = useRef(0)
     const visible = useRef(false)
     const particles = useRef([])
     const mouse = useRef({ x: 0, y: 0, active: false })
@@ -66,6 +67,13 @@ export default function DataPipelineViz() {
             return
         }
 
+        const now = performance.now()
+        if (now - lastFrame.current < 33) {
+            raf.current = requestAnimationFrame(draw)
+            return
+        }
+        lastFrame.current = now
+
         const ctx = canvas.getContext('2d')
         if (!ctx) {
             raf.current = requestAnimationFrame(draw)
@@ -84,19 +92,19 @@ export default function DataPipelineViz() {
 
         // Atmospheric background layers for a premium panel feel.
         const bg = ctx.createLinearGradient(0, 0, W, H)
-        bg.addColorStop(0, 'rgba(17, 10, 52, 0.34)')
-        bg.addColorStop(0.55, 'rgba(7, 4, 28, 0.2)')
-        bg.addColorStop(1, 'rgba(2, 1, 12, 0.5)')
+        bg.addColorStop(0, 'rgba(255, 255, 255, 0.08)')
+        bg.addColorStop(0.55, 'rgba(18, 24, 33, 0.26)')
+        bg.addColorStop(1, 'rgba(8, 12, 18, 0.54)')
         ctx.fillStyle = bg
         ctx.fillRect(0, 0, W, H)
 
         const fog = ctx.createRadialGradient(W * 0.22, H * 0.18, 30, W * 0.22, H * 0.18, W * 0.7)
-        fog.addColorStop(0, 'rgba(196, 132, 252, 0.22)')
-        fog.addColorStop(1, 'rgba(196, 132, 252, 0)')
+        fog.addColorStop(0, 'rgba(225, 235, 248, 0.18)')
+        fog.addColorStop(1, 'rgba(225, 235, 248, 0)')
         ctx.fillStyle = fog
         ctx.fillRect(0, 0, W, H)
 
-        ctx.strokeStyle = 'rgba(167, 139, 250, 0.07)'
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)'
         ctx.lineWidth = 1
         for (let x = 20; x < W; x += 40) {
             ctx.beginPath()
@@ -119,25 +127,25 @@ export default function DataPipelineViz() {
             y: baseY + Math.sin(t * 0.9 + i * 0.8) * 7,
         }))
 
-        const samples = 160
+        const samples = performanceMode === 'low' ? 96 : 160
         ctx.beginPath()
         for (let i = 0; i <= samples; i++) {
             const p = getTrackPoint(i / samples, stagePoints, t)
             if (i === 0) ctx.moveTo(p.x, p.y)
             else ctx.lineTo(p.x, p.y)
         }
-        ctx.strokeStyle = 'rgba(124, 58, 237, 0.2)'
+        ctx.strokeStyle = 'rgba(201, 215, 236, 0.2)'
         ctx.lineWidth = 4
         ctx.lineCap = 'round'
         ctx.stroke()
 
         const flow = ctx.createLinearGradient(padX, 0, W - padX, 0)
         const phase = (t * 0.3) % 1
-        flow.addColorStop(0, 'rgba(129, 140, 248, 0)')
-        flow.addColorStop(Math.max(0, phase - 0.15), 'rgba(129, 140, 248, 0)')
-        flow.addColorStop(phase, 'rgba(196, 132, 252, 0.95)')
-        flow.addColorStop(Math.min(1, phase + 0.15), 'rgba(129, 140, 248, 0)')
-        flow.addColorStop(1, 'rgba(129, 140, 248, 0)')
+        flow.addColorStop(0, 'rgba(214, 226, 244, 0)')
+        flow.addColorStop(Math.max(0, phase - 0.15), 'rgba(214, 226, 244, 0)')
+        flow.addColorStop(phase, 'rgba(241, 247, 255, 0.9)')
+        flow.addColorStop(Math.min(1, phase + 0.15), 'rgba(214, 226, 244, 0)')
+        flow.addColorStop(1, 'rgba(214, 226, 244, 0)')
 
         ctx.beginPath()
         for (let i = 0; i <= samples; i++) {
@@ -159,25 +167,25 @@ export default function DataPipelineViz() {
             const isActive = i === activeStage
 
             const aura = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, 36 + pulse * 14)
-            aura.addColorStop(0, `rgba(167, 139, 250, ${0.24 + pulse * 0.18})`)
-            aura.addColorStop(1, 'rgba(167, 139, 250, 0)')
+            aura.addColorStop(0, `rgba(228, 237, 250, ${0.22 + pulse * 0.16})`)
+            aura.addColorStop(1, 'rgba(228, 237, 250, 0)')
             ctx.fillStyle = aura
             ctx.beginPath()
             ctx.arc(s.x, s.y, 36 + pulse * 14, 0, Math.PI * 2)
             ctx.fill()
 
-            ctx.fillStyle = 'rgba(7, 4, 28, 0.92)'
+            ctx.fillStyle = 'rgba(10, 14, 20, 0.92)'
             ctx.beginPath()
             ctx.arc(s.x, s.y, 12, 0, Math.PI * 2)
             ctx.fill()
 
-            ctx.strokeStyle = isActive ? 'rgba(196, 132, 252, 0.85)' : `rgba(124, 58, 237, ${0.35 + pulse * 0.25})`
+            ctx.strokeStyle = isActive ? 'rgba(246, 249, 255, 0.85)' : `rgba(176, 196, 224, ${0.35 + pulse * 0.22})`
             ctx.lineWidth = 1.5
             ctx.beginPath()
             ctx.arc(s.x, s.y, 12, 0, Math.PI * 2)
             ctx.stroke()
 
-            ctx.strokeStyle = isActive ? 'rgba(196, 132, 252, 0.6)' : 'rgba(167, 139, 250, 0.22)'
+            ctx.strokeStyle = isActive ? 'rgba(232, 240, 251, 0.52)' : 'rgba(203, 217, 237, 0.18)'
             ctx.lineWidth = 1
             ctx.beginPath()
             ctx.arc(s.x, s.y, 18 + pulse * 5, 0, Math.PI * 2)
@@ -186,21 +194,23 @@ export default function DataPipelineViz() {
             ctx.font = '700 10px "JetBrains Mono", monospace'
             ctx.textAlign = 'center'
             ctx.textBaseline = 'bottom'
-            ctx.fillStyle = isActive ? 'rgba(216, 180, 255, 0.9)' : 'rgba(167, 139, 250, 0.56)'
+            ctx.fillStyle = isActive ? 'rgba(244, 247, 252, 0.92)' : 'rgba(203, 217, 237, 0.56)'
             ctx.fillText(STAGES[i].label, s.x, s.y - 24)
 
             ctx.font = '9px "JetBrains Mono", monospace'
             ctx.textBaseline = 'top'
-            ctx.fillStyle = 'rgba(184, 177, 228, 0.42)'
+            ctx.fillStyle = 'rgba(188, 201, 219, 0.42)'
             ctx.fillText(STAGES[i].subLabel, s.x, s.y + 22)
         }
 
-        if (Math.random() < 0.11 && particles.current.length < 70) {
+        const particleSpawnRate = performanceMode === 'low' ? 0.06 : 0.11
+        const maxParticles = performanceMode === 'low' ? 34 : 70
+        if (Math.random() < particleSpawnRate && particles.current.length < maxParticles) {
             particles.current.push({
                 progress: 0,
-                speed: 0.0028 + Math.random() * 0.0036,
+                speed: 0.0028 + Math.random() * (performanceMode === 'low' ? 0.0022 : 0.0036),
                 size: 1.8 + Math.random() * 2.4,
-                hue: Math.random() > 0.5 ? 284 : 228,
+                hue: Math.random() > 0.5 ? 206 : 214,
                 wobble: Math.random() * Math.PI * 2,
             })
         }
@@ -246,7 +256,7 @@ export default function DataPipelineViz() {
         ctx.font = '10px "JetBrains Mono", monospace'
         ctx.textBaseline = 'bottom'
         ctx.textAlign = 'left'
-        ctx.fillStyle = 'rgba(196, 188, 236, 0.32)'
+        ctx.fillStyle = 'rgba(196, 208, 225, 0.32)'
         const epoch = (((t * 0.6) % 400) | 0).toString().padStart(3, '0')
         const loss = (0.72 * Math.exp(-epoch * 0.006) + 0.01).toFixed(4)
         ctx.fillText(`epoch ${epoch}   loss ${loss}`, 20, H - 14)
@@ -257,14 +267,14 @@ export default function DataPipelineViz() {
 
         if (mouse.current.active) {
             const spotlight = ctx.createRadialGradient(mx, my, 0, mx, my, 220)
-            spotlight.addColorStop(0, 'rgba(196, 132, 252, 0.2)')
-            spotlight.addColorStop(1, 'rgba(196, 132, 252, 0)')
+            spotlight.addColorStop(0, 'rgba(223, 234, 249, 0.18)')
+            spotlight.addColorStop(1, 'rgba(223, 234, 249, 0)')
             ctx.fillStyle = spotlight
             ctx.fillRect(0, 0, W, H)
         }
 
         raf.current = requestAnimationFrame(draw)
-    }, [getTrackPoint])
+    }, [getTrackPoint, performanceMode])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -275,10 +285,10 @@ export default function DataPipelineViz() {
                 queueDepth: `${Math.max(80, Math.round(140 + Math.sin(now * 1.7) * 56))}`,
                 confidence: (98.6 + Math.sin(now * 0.8) * 0.7).toFixed(1),
             })
-        }, 900)
+        }, performanceMode === 'low' ? 1300 : 900)
 
         return () => clearInterval(interval)
-    }, [])
+    }, [performanceMode])
 
     useEffect(() => {
         const canvas = canvasRef.current
@@ -287,7 +297,7 @@ export default function DataPipelineViz() {
 
         const resize = () => {
             const rect = container.getBoundingClientRect()
-            dprRef.current = Math.min(window.devicePixelRatio || 1, 2)
+            dprRef.current = Math.min(window.devicePixelRatio || 1, performanceMode === 'low' ? 1.1 : 1.6)
             canvas.width = Math.floor(rect.width * dprRef.current)
             canvas.height = Math.floor(rect.height * dprRef.current)
         }
@@ -332,7 +342,7 @@ export default function DataPipelineViz() {
             if (raf.current) cancelAnimationFrame(raf.current)
             obs.disconnect()
         }
-    }, [draw])
+    }, [draw, performanceMode])
 
     return (
         <section style={{ position: 'relative', padding: '72px 0 92px', overflow: 'hidden' }}>
@@ -350,7 +360,7 @@ export default function DataPipelineViz() {
                     height: 420,
                     borderRadius: '50%',
                     transform: 'translateX(-50%)',
-                    background: 'radial-gradient(circle, rgba(124,58,237,0.2) 0%, rgba(124,58,237,0) 72%)',
+                    background: 'radial-gradient(circle, rgba(223,234,249,0.18) 0%, rgba(223,234,249,0) 72%)',
                     pointerEvents: 'none',
                 }}
             />
@@ -363,11 +373,11 @@ export default function DataPipelineViz() {
                     transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
                     style={{ textAlign: 'center', marginBottom: 24 }}
                 >
-                    <p style={{ fontSize: 12, letterSpacing: '0.34em', textTransform: 'uppercase', color: 'rgba(196, 132, 252, 0.8)', fontFamily: 'var(--font-mono)', marginBottom: 12 }}>
+                    <p style={{ fontSize: 12, letterSpacing: '0.34em', textTransform: 'uppercase', color: 'rgba(218, 228, 243, 0.72)', fontFamily: 'var(--font-mono)', marginBottom: 12 }}>
                         Pipeline Choreography
                     </p>
                     <h2 style={{ fontSize: 'clamp(1.8rem, 3.8vw, 3.1rem)', fontWeight: 700, lineHeight: 1.1 }}>
-                        Data moves like a <span className="gradient-text">cinematic system</span>
+                        Data moves like a <span className="gradient-text" data-text="system">cinematic system</span>
                     </h2>
                 </motion.div>
 
@@ -404,20 +414,21 @@ export default function DataPipelineViz() {
                             <motion.div
                                 key={stage.label}
                                 variants={cardReveal}
-                                whileHover={{ y: -6, scale: 1.03, borderColor: 'rgba(196,132,252,0.36)', boxShadow: '0 20px 35px rgba(10,6,28,0.5)' }}
+                                whileHover={{ y: -6, scale: 1.03, borderColor: 'rgba(255,255,255,0.22)', boxShadow: '0 20px 35px rgba(4,7,12,0.3)' }}
                                 transition={{ type: 'spring', stiffness: 240, damping: 18 }}
                                 style={{
                                     padding: '10px 12px',
                                     borderRadius: 12,
-                                    border: '1px solid rgba(167, 139, 250, 0.18)',
-                                    background: i % 2 ? 'linear-gradient(140deg, rgba(16,10,45,0.6), rgba(8,5,29,0.42))' : 'linear-gradient(140deg, rgba(11,8,35,0.65), rgba(7,4,24,0.45))',
+                                    border: '1px solid rgba(255,255,255,0.12)',
+                                    background: i % 2 ? 'linear-gradient(140deg, rgba(255,255,255,0.1), rgba(16,22,31,0.38))' : 'linear-gradient(140deg, rgba(255,255,255,0.08), rgba(11,15,22,0.44))',
                                     backdropFilter: 'blur(8px)',
                                 }}
+                                data-hover
                             >
-                                <div style={{ fontSize: 10, letterSpacing: '0.16em', color: 'rgba(205, 179, 246, 0.9)', fontFamily: 'var(--font-mono)' }}>
+                                <div style={{ fontSize: 10, letterSpacing: '0.16em', color: 'rgba(206, 217, 234, 0.82)', fontFamily: 'var(--font-mono)' }}>
                                     {stage.label}
                                 </div>
-                                <div style={{ marginTop: 6, fontSize: 11, color: 'rgba(190, 180, 225, 0.72)' }}>
+                                <div style={{ marginTop: 6, fontSize: 11, color: 'rgba(214, 223, 237, 0.68)' }}>
                                     {stage.subLabel}
                                 </div>
                             </motion.div>
@@ -448,19 +459,20 @@ export default function DataPipelineViz() {
                         ].map((item) => (
                             <motion.div
                                 key={item.label}
-                                whileHover={{ y: -4, borderColor: 'rgba(129,140,248,0.36)' }}
+                                whileHover={{ y: -4, borderColor: 'rgba(255,255,255,0.22)' }}
                                 transition={{ type: 'spring', stiffness: 260, damping: 22 }}
                                 style={{
                                     borderRadius: 12,
-                                    border: '1px solid rgba(129, 140, 248, 0.2)',
+                                    border: '1px solid rgba(255,255,255,0.12)',
                                     padding: '10px 12px',
-                                    background: 'linear-gradient(160deg, rgba(8, 5, 28, 0.6), rgba(4, 2, 16, 0.44))',
+                                    background: 'linear-gradient(160deg, rgba(255,255,255,0.1), rgba(11,15,22,0.42))',
                                 }}
+                                data-hover
                             >
-                                <div style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(151, 165, 255, 0.78)', fontFamily: 'var(--font-mono)' }}>
+                                <div style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(206, 217, 234, 0.78)', fontFamily: 'var(--font-mono)' }}>
                                     {item.label}
                                 </div>
-                                <div style={{ marginTop: 6, fontSize: 15, fontWeight: 600, color: 'rgba(241, 236, 255, 0.95)' }}>
+                                <div style={{ marginTop: 6, fontSize: 15, fontWeight: 600, color: 'rgba(247, 249, 252, 0.95)' }}>
                                     {item.value}
                                 </div>
                             </motion.div>

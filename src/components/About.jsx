@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion'
 
 const INTERESTS = [
-    { emoji: '🧠', label: 'Deep Learning' },
-    { emoji: '📊', label: 'Data Viz' },
-    { emoji: '🤖', label: 'NLP' },
-    { emoji: '👁️', label: 'Computer Vision' },
-    { emoji: '∞', label: 'Curiosity', gradient: true },
+    { label: 'LLM Systems' },
+    { label: 'Data Stories' },
+    { label: 'Computer Vision' },
+    { label: 'Realtime UX' },
+    { label: 'Rapid Prototyping' },
 ]
 
 const fadeUp = {
@@ -30,7 +30,7 @@ export default function About() {
                     <motion.p
                         variants={fadeUp}
                         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                        style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 16, color: 'var(--accent-light)', fontFamily: 'var(--font-mono)' }}
+                        style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 16, color: 'rgba(218, 228, 243, 0.72)', fontFamily: 'var(--font-mono)' }}
                     >
                         About
                     </motion.p>
@@ -39,9 +39,7 @@ export default function About() {
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                         style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 700, lineHeight: 1.15, marginBottom: 32 }}
                     >
-                        Driven by{' '}
-                        <span className="gradient-text">data</span> &{' '}
-                        <span className="gradient-text">algorithms</span>.
+                        Building products that stay <span className="gradient-text" data-text="human">human</span> even when the tech gets complex.
                     </motion.h2>
                 </motion.div>
 
@@ -52,14 +50,13 @@ export default function About() {
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                             viewport={{ once: true }}
-                            whileHover={{ borderColor: 'rgba(124,58,237,0.3)', y: -3 }}
-                            className="glass-card animate-shimmer holo-border breathe-glow"
+                            whileHover={{ borderColor: 'rgba(255,255,255,0.22)', y: -4 }}
+                            className="glass-card"
+                            data-hover
                             style={{ padding: 32 }}
                         >
                             <p style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--text-secondary)' }}>
-                                I'm a data science enthusiast deeply passionate about AI/ML algorithms,
-                                statistical modeling, and extracting meaningful patterns from complex datasets.
-                                I love turning raw data into actionable intelligence.
+                                I enjoy taking ambiguous ideas and turning them into working product flows. The best outcomes usually come from translating heavy technical capability into something clear, fast, and useful.
                             </p>
                         </motion.div>
 
@@ -68,14 +65,13 @@ export default function About() {
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                             viewport={{ once: true }}
-                            whileHover={{ borderColor: 'rgba(124,58,237,0.3)', y: -3 }}
-                            className="glass-card animate-shimmer holo-border breathe-glow"
+                            whileHover={{ borderColor: 'rgba(255,255,255,0.22)', y: -4 }}
+                            className="glass-card"
+                            data-hover
                             style={{ padding: 32 }}
                         >
                             <p style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--text-secondary)' }}>
-                                From neural networks and NLP to computer vision and predictive analytics,
-                                I thrive at the intersection of mathematics and engineering. Every feature
-                                matters. Every epoch counts.
+                                My work usually spans AI models, data pipelines, frontend architecture, and visual polish. I care about the full path from idea to interface, not just one layer of the stack.
                             </p>
                         </motion.div>
                     </div>
@@ -88,18 +84,19 @@ export default function About() {
                         variants={stagger}
                         style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14, marginTop: 56 }}
                     >
-                        {INTERESTS.map(({ emoji, label, gradient }) => (
+                        {INTERESTS.map(({ label }) => (
                             <motion.div
                                 key={label}
                                 variants={fadeUp}
                                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                                whileHover={{ y: -5, scale: 1.08, borderColor: 'rgba(124,58,237,0.4)', boxShadow: '0 0 25px rgba(124,58,237,0.15)' }}
+                                whileHover={{ y: -5, scale: 1.05, borderColor: 'rgba(255,255,255,0.24)', boxShadow: '0 18px 40px rgba(5,8,14,0.24)' }}
                                 whileTap={{ scale: 0.95 }}
                                 className="glass-card"
-                                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 22px', cursor: 'default' }}
+                                data-hover
+                                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 18px', cursor: 'default' }}
                             >
-                                <span style={{ fontSize: gradient ? 28 : 20 }} className={gradient ? 'gradient-text' : undefined}>
-                                    {emoji}
+                                <span style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(203, 213, 227, 0.62)', fontFamily: 'var(--font-mono)' }}>
+                                    Focus
                                 </span>
                                 <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>
                                     {label}

@@ -25,11 +25,12 @@ const tileReveal = {
     },
 }
 
-export default function NeuralNetworkViz() {
+export default function NeuralNetworkViz({ performanceMode = 'high' }) {
     const canvasRef = useRef(null)
     const shellRef = useRef(null)
     const raf = useRef(null)
     const dprRef = useRef(1)
+    const lastFrame = useRef(0)
     const visible = useRef(false)
     const mouse = useRef({ x: -9999, y: -9999, active: false })
     const pulses = useRef([])
@@ -77,6 +78,13 @@ export default function NeuralNetworkViz() {
             return
         }
 
+        const now = performance.now()
+        if (now - lastFrame.current < 33) {
+            raf.current = requestAnimationFrame(draw)
+            return
+        }
+        lastFrame.current = now
+
         const ctx = canvas.getContext('2d')
         if (!ctx) {
             raf.current = requestAnimationFrame(draw)
@@ -92,21 +100,22 @@ export default function NeuralNetworkViz() {
         ctx.clearRect(0, 0, W, H)
 
         const bg = ctx.createLinearGradient(0, 0, W, H)
-        bg.addColorStop(0, 'rgba(15, 9, 47, 0.42)')
-        bg.addColorStop(0.55, 'rgba(7, 4, 28, 0.28)')
-        bg.addColorStop(1, 'rgba(2, 1, 14, 0.52)')
+        bg.addColorStop(0, 'rgba(255, 255, 255, 0.08)')
+        bg.addColorStop(0.55, 'rgba(18, 24, 33, 0.3)')
+        bg.addColorStop(1, 'rgba(8, 12, 18, 0.58)')
         ctx.fillStyle = bg
         ctx.fillRect(0, 0, W, H)
 
         const haze = ctx.createRadialGradient(W * 0.75, H * 0.25, 40, W * 0.75, H * 0.25, W * 0.6)
-        haze.addColorStop(0, 'rgba(129, 140, 248, 0.16)')
-        haze.addColorStop(1, 'rgba(129, 140, 248, 0)')
+        haze.addColorStop(0, 'rgba(202, 217, 238, 0.16)')
+        haze.addColorStop(1, 'rgba(202, 217, 238, 0)')
         ctx.fillStyle = haze
         ctx.fillRect(0, 0, W, H)
 
-        ctx.strokeStyle = 'rgba(167, 139, 250, 0.06)'
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)'
         ctx.lineWidth = 1
-        for (let x = 24; x < W; x += 44) {
+        const gridStep = performanceMode === 'low' ? 56 : 44
+        for (let x = 24; x < W; x += gridStep) {
             ctx.beginPath()
             ctx.moveTo(x, 0)
             ctx.lineTo(x, H)
@@ -126,7 +135,7 @@ export default function NeuralNetworkViz() {
                     const base = (a.activation + b.activation) * 0.5
                     const alpha = 0.025 + base * 0.085 + pointerBoost * 0.16
 
-                    ctx.strokeStyle = `rgba(124, 58, 237, ${alpha})`
+                    ctx.strokeStyle = `rgba(203, 217, 239, ${alpha})`
                     ctx.lineWidth = 0.6 + base * 0.65
                     ctx.beginPath()
                     ctx.moveTo(a.x, a.y)
@@ -136,7 +145,9 @@ export default function NeuralNetworkViz() {
             }
         }
 
-        if (Math.random() < 0.09 && pulses.current.length < 46) {
+        const pulseSpawnRate = performanceMode === 'low' ? 0.05 : 0.09
+        const maxPulses = performanceMode === 'low' ? 24 : 46
+        if (Math.random() < pulseSpawnRate && pulses.current.length < maxPulses) {
             const startIdx = Math.floor(Math.random() * neurons[0].length)
             const nextIdx = Math.floor(Math.random() * neurons[1].length)
             pulses.current.push({
@@ -145,8 +156,8 @@ export default function NeuralNetworkViz() {
                 toLayer: 1,
                 toIdx: nextIdx,
                 progress: 0,
-                speed: 0.015 + Math.random() * 0.013,
-                hue: Math.random() > 0.5 ? 282 : 228,
+                speed: 0.015 + Math.random() * (performanceMode === 'low' ? 0.009 : 0.013),
+                hue: Math.random() > 0.5 ? 206 : 214,
                 width: 1.8 + Math.random() * 1.8,
             })
         }
@@ -208,17 +219,17 @@ export default function NeuralNetworkViz() {
                 const alpha = 0.35 + n.activation * 0.4 + pointerBoost * 0.28
 
                 const aura = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 3.5)
-                aura.addColorStop(0, `rgba(167, 139, 250, ${alpha * 0.35})`)
-                aura.addColorStop(1, 'rgba(167, 139, 250, 0)')
+                aura.addColorStop(0, `rgba(225, 235, 249, ${alpha * 0.35})`)
+                aura.addColorStop(1, 'rgba(225, 235, 249, 0)')
                 ctx.fillStyle = aura
                 ctx.beginPath()
                 ctx.arc(n.x, n.y, r * 3.5, 0, Math.PI * 2)
                 ctx.fill()
 
                 const body = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r)
-                body.addColorStop(0, `rgba(230, 218, 255, ${alpha})`)
-                body.addColorStop(0.55, `rgba(196, 132, 252, ${alpha * 0.72})`)
-                body.addColorStop(1, `rgba(124, 58, 237, ${alpha * 0.35})`)
+                body.addColorStop(0, `rgba(245, 248, 255, ${alpha})`)
+                body.addColorStop(0.55, `rgba(206, 220, 241, ${alpha * 0.72})`)
+                body.addColorStop(1, `rgba(151, 174, 205, ${alpha * 0.35})`)
                 ctx.fillStyle = body
                 ctx.beginPath()
                 ctx.arc(n.x, n.y, r, 0, Math.PI * 2)
@@ -229,7 +240,7 @@ export default function NeuralNetworkViz() {
             ctx.font = '10px "JetBrains Mono", monospace'
             ctx.textAlign = 'center'
             ctx.textBaseline = 'bottom'
-            ctx.fillStyle = 'rgba(188, 173, 232, 0.42)'
+            ctx.fillStyle = 'rgba(194, 207, 226, 0.42)'
             ctx.fillText(LAYER_NAMES[l], lx, H - 14)
         }
 
@@ -240,20 +251,20 @@ export default function NeuralNetworkViz() {
         for (let i = 0; i < outputLayer.length; i++) {
             const out = outputLayer[i]
             const confidence = (out.activation * 100).toFixed(1)
-            ctx.fillStyle = 'rgba(220, 204, 255, 0.76)'
+            ctx.fillStyle = 'rgba(233, 240, 251, 0.76)'
             ctx.fillText(`${OUTPUT_NAMES[i]} ${confidence}%`, out.x + 18, out.y)
         }
 
         if (mouse.current.active) {
             const spotlight = ctx.createRadialGradient(mx, my, 0, mx, my, 220)
-            spotlight.addColorStop(0, 'rgba(129, 140, 248, 0.22)')
-            spotlight.addColorStop(1, 'rgba(129, 140, 248, 0)')
+            spotlight.addColorStop(0, 'rgba(200, 216, 238, 0.18)')
+            spotlight.addColorStop(1, 'rgba(200, 216, 238, 0)')
             ctx.fillStyle = spotlight
             ctx.fillRect(0, 0, W, H)
         }
 
         raf.current = requestAnimationFrame(draw)
-    }, [getNeurons])
+    }, [getNeurons, performanceMode])
 
     useEffect(() => {
         const tick = setInterval(() => {
@@ -264,10 +275,10 @@ export default function NeuralNetworkViz() {
                 tokenRate: `${Math.round(2100 + Math.cos(now * 0.8) * 220)}`,
                 drift: (0.015 + Math.abs(Math.sin(now * 1.3)) * 0.012).toFixed(3),
             })
-        }, 900)
+        }, performanceMode === 'low' ? 1300 : 900)
 
         return () => clearInterval(tick)
-    }, [])
+    }, [performanceMode])
 
     useEffect(() => {
         const canvas = canvasRef.current
@@ -276,7 +287,7 @@ export default function NeuralNetworkViz() {
 
         const resize = () => {
             const rect = shell.getBoundingClientRect()
-            dprRef.current = Math.min(window.devicePixelRatio || 1, 2)
+            dprRef.current = Math.min(window.devicePixelRatio || 1, performanceMode === 'low' ? 1.1 : 1.6)
             canvas.width = Math.floor(rect.width * dprRef.current)
             canvas.height = Math.floor(rect.height * dprRef.current)
         }
@@ -323,10 +334,10 @@ export default function NeuralNetworkViz() {
             if (raf.current) cancelAnimationFrame(raf.current)
             observer.disconnect()
         }
-    }, [draw])
+    }, [draw, performanceMode])
 
     return (
-        <section style={{ position: 'relative', padding: '96px 0', overflow: 'hidden', background: 'linear-gradient(180deg, rgba(5,5,32,0.95) 0%, rgba(3,0,20,0.95) 100%)' }}>
+        <section style={{ position: 'relative', padding: '96px 0', overflow: 'hidden', background: 'linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(8,10,14,0) 100%)' }}>
             <motion.div
                 aria-hidden
                 initial={{ opacity: 0, scale: 0.85 }}
@@ -340,7 +351,7 @@ export default function NeuralNetworkViz() {
                     width: 480,
                     height: 480,
                     borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(129,140,248,0.25), rgba(129,140,248,0))',
+                    background: 'radial-gradient(circle, rgba(204,218,239,0.2), rgba(204,218,239,0))',
                     pointerEvents: 'none',
                 }}
             />
@@ -353,13 +364,13 @@ export default function NeuralNetworkViz() {
                     transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
                     style={{ marginBottom: 26 }}
                 >
-                    <p style={{ fontSize: 12, letterSpacing: '0.32em', textTransform: 'uppercase', marginBottom: 12, color: 'rgba(151, 165, 255, 0.9)', fontFamily: 'var(--font-mono)' }}>
+                    <p style={{ fontSize: 12, letterSpacing: '0.32em', textTransform: 'uppercase', marginBottom: 12, color: 'rgba(218, 228, 243, 0.72)', fontFamily: 'var(--font-mono)' }}>
                         Neural Choreography
                     </p>
                     <h2 style={{ fontSize: 'clamp(1.9rem, 4.2vw, 3.2rem)', fontWeight: 700, lineHeight: 1.1 }}>
-                        Signal paths that feel <span className="gradient-text">alive</span>
+                        Signal paths that feel <span className="gradient-text" data-text="alive">alive</span>
                     </h2>
-                    <p style={{ fontSize: 14, marginTop: 12, color: 'rgba(190, 180, 225, 0.78)', maxWidth: 600, marginInline: 'auto' }}>
+                    <p style={{ fontSize: 14, marginTop: 12, color: 'rgba(214, 223, 237, 0.72)', maxWidth: 600, marginInline: 'auto' }}>
                         Hover to amplify local activations and watch inference packets travel through each layer in real time.
                     </p>
                 </motion.div>
@@ -397,20 +408,21 @@ export default function NeuralNetworkViz() {
                             <motion.div
                                 key={label}
                                 variants={tileReveal}
-                                whileHover={{ y: -5, scale: 1.03, borderColor: 'rgba(151,165,255,0.4)' }}
+                                whileHover={{ y: -5, scale: 1.03, borderColor: 'rgba(255,255,255,0.22)' }}
                                 transition={{ type: 'spring', stiffness: 240, damping: 18 }}
                                 style={{
                                     borderRadius: 12,
-                                    border: '1px solid rgba(151, 165, 255, 0.2)',
-                                    background: i % 2 ? 'linear-gradient(145deg, rgba(13,10,43,0.63), rgba(5,4,22,0.44))' : 'linear-gradient(145deg, rgba(8,6,31,0.66), rgba(4,2,17,0.45))',
+                                    border: '1px solid rgba(255,255,255,0.12)',
+                                    background: i % 2 ? 'linear-gradient(145deg, rgba(255,255,255,0.1), rgba(18,24,33,0.36))' : 'linear-gradient(145deg, rgba(255,255,255,0.08), rgba(12,16,24,0.42))',
                                     padding: '10px 12px',
                                     textAlign: 'left',
                                 }}
+                                data-hover
                             >
-                                <div style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(176, 185, 255, 0.82)', fontFamily: 'var(--font-mono)' }}>
+                                <div style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(206, 217, 234, 0.76)', fontFamily: 'var(--font-mono)' }}>
                                     Layer {i + 1}
                                 </div>
-                                <div style={{ marginTop: 6, fontSize: 12, color: 'rgba(228, 221, 255, 0.92)' }}>
+                                <div style={{ marginTop: 6, fontSize: 12, color: 'rgba(238, 243, 251, 0.92)' }}>
                                     {label}
                                 </div>
                             </motion.div>
@@ -441,19 +453,20 @@ export default function NeuralNetworkViz() {
                         ].map((metric) => (
                             <motion.div
                                 key={metric.label}
-                                whileHover={{ y: -4, borderColor: 'rgba(196,132,252,0.4)' }}
+                                whileHover={{ y: -4, borderColor: 'rgba(255,255,255,0.22)' }}
                                 transition={{ type: 'spring', stiffness: 260, damping: 21 }}
                                 style={{
                                     borderRadius: 12,
-                                    border: '1px solid rgba(196, 132, 252, 0.23)',
-                                    background: 'linear-gradient(160deg, rgba(8,6,30,0.65), rgba(2,1,14,0.42))',
+                                    border: '1px solid rgba(255,255,255,0.12)',
+                                    background: 'linear-gradient(160deg, rgba(255,255,255,0.1), rgba(12,16,24,0.42))',
                                     padding: '10px 12px',
                                 }}
+                                data-hover
                             >
-                                <div style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(205, 179, 246, 0.8)', fontFamily: 'var(--font-mono)' }}>
+                                <div style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(206, 217, 234, 0.76)', fontFamily: 'var(--font-mono)' }}>
                                     {metric.label}
                                 </div>
-                                <div style={{ marginTop: 6, fontSize: 15, fontWeight: 600, color: 'rgba(247, 241, 255, 0.95)' }}>
+                                <div style={{ marginTop: 6, fontSize: 15, fontWeight: 600, color: 'rgba(247, 249, 252, 0.95)' }}>
                                     {metric.value}
                                 </div>
                             </motion.div>

@@ -10,7 +10,7 @@ export default function Footer() {
     const year = new Date().getFullYear()
 
     return (
-        <footer style={{ position: 'relative', padding: '96px 0 44px', overflow: 'hidden', background: 'var(--bg-primary)' }}>
+        <footer style={{ position: 'relative', padding: '96px 0 44px', overflow: 'hidden', background: 'transparent' }}>
             <motion.div
                 aria-hidden
                 initial={{ opacity: 0, scale: 0.86 }}
@@ -26,7 +26,7 @@ export default function Footer() {
                     transform: 'translateX(-50%)',
                     borderRadius: '50%',
                     pointerEvents: 'none',
-                    background: 'radial-gradient(circle, rgba(124,58,237,0.2), rgba(124,58,237,0))',
+                    background: 'radial-gradient(circle, rgba(219,231,249,0.18), rgba(219,231,249,0))',
                 }}
             />
 
@@ -46,9 +46,9 @@ export default function Footer() {
                         fontFamily: 'var(--font-display)',
                     }}
                 >
-                    Building digital experiences
+                    Building products
                     <br />
-                    that feel <span className="gradient-text">inevitable</span>.
+                    with <span className="gradient-text" data-text="staying power">staying power</span>.
                 </motion.p>
 
                 <motion.p
@@ -56,9 +56,9 @@ export default function Footer() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7, delay: 0.1 }}
-                    style={{ maxWidth: 620, margin: '0 auto 30px', color: 'rgba(188, 180, 222, 0.82)', fontSize: 15, lineHeight: 1.75 }}
+                    style={{ maxWidth: 620, margin: '0 auto 30px', color: 'rgba(214, 223, 237, 0.74)', fontSize: 15, lineHeight: 1.75 }}
                 >
-                    Open for ambitious AI products, interactive web systems, and design-forward engineering collaborations.
+                    Open for AI product work, engineering internships, frontend-heavy builds, and teams that care about both velocity and finish.
                 </motion.p>
 
                 <motion.div
@@ -74,13 +74,14 @@ export default function Footer() {
                             href={href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            whileHover={{ y: -3, borderColor: 'rgba(196,132,252,0.55)', color: '#ffffff' }}
+                            whileHover={{ y: -3, borderColor: 'rgba(255,255,255,0.24)', color: '#ffffff' }}
+                            data-hover
                             style={{
                                 borderRadius: 999,
                                 border: '1px solid rgba(255,255,255,0.16)',
-                                background: 'linear-gradient(140deg, rgba(14,10,38,0.7), rgba(6,4,20,0.55))',
+                                background: 'linear-gradient(140deg, rgba(255,255,255,0.1), rgba(13,18,27,0.48))',
                                 textDecoration: 'none',
-                                color: 'rgba(219, 212, 247, 0.9)',
+                                color: 'rgba(229, 236, 247, 0.9)',
                                 padding: '10px 18px',
                                 fontSize: 12,
                                 letterSpacing: '0.1em',
@@ -100,13 +101,13 @@ export default function Footer() {
                     transition={{ delay: 0.2, duration: 0.6 }}
                     style={{ display: 'grid', justifyItems: 'center', gap: 10 }}
                 >
-                    <p style={{ fontSize: 12, color: 'rgba(166, 155, 200, 0.85)', fontFamily: 'var(--font-mono)' }}>
-                        Designed and engineered by <span style={{ color: 'rgba(206, 176, 252, 0.95)' }}>Tejas</span> — {year}
+                    <p style={{ fontSize: 12, color: 'rgba(188, 199, 218, 0.78)', fontFamily: 'var(--font-mono)' }}>
+                        <span style={{ color: 'rgba(245,247,251,0.95)' }}>Tejas Keerthi</span> - {year}
                     </p>
                     <motion.div
                         animate={{ opacity: [0.25, 0.85, 0.25], scale: [1, 1.35, 1] }}
                         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                        style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(196,132,252,0.95)' }}
+                        style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(235,242,252,0.92)' }}
                     />
                 </motion.div>
             </div>

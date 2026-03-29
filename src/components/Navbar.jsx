@@ -60,7 +60,7 @@ export default function Navbar({ onContactClick }) {
                     className="nav-shell"
                     style={{
                         margin: '0 auto',
-                        maxWidth: 1020,
+                        maxWidth: 1040,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -68,13 +68,13 @@ export default function Navbar({ onContactClick }) {
                         borderRadius: 999,
                         padding: scrolled ? '8px 10px' : '10px 12px',
                         background: scrolled
-                            ? 'linear-gradient(155deg, rgba(11,8,34,0.85), rgba(5,3,18,0.72))'
-                            : 'linear-gradient(155deg, rgba(9,6,30,0.62), rgba(5,3,18,0.5))',
-                        border: '1px solid rgba(196, 132, 252, 0.24)',
-                        backdropFilter: 'blur(20px) saturate(150%)',
+                            ? 'linear-gradient(155deg, rgba(255,255,255,0.16), rgba(18,24,33,0.68) 34%, rgba(11,15,21,0.76) 100%)'
+                            : 'linear-gradient(155deg, rgba(255,255,255,0.14), rgba(18,24,33,0.52) 34%, rgba(11,15,21,0.62) 100%)',
+                        border: '1px solid rgba(255,255,255,0.16)',
+                        backdropFilter: 'blur(26px) saturate(170%)',
                         boxShadow: scrolled
-                            ? '0 16px 40px rgba(3,0,14,0.55), inset 0 1px 0 rgba(255,255,255,0.12)'
-                            : '0 10px 30px rgba(3,0,14,0.4), inset 0 1px 0 rgba(255,255,255,0.1)',
+                            ? '0 18px 42px rgba(4,7,12,0.34), inset 0 1px 0 rgba(255,255,255,0.2)'
+                            : '0 12px 30px rgba(4,7,12,0.24), inset 0 1px 0 rgba(255,255,255,0.16)',
                         transition: 'all 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
                     }}
                 >
@@ -83,13 +83,14 @@ export default function Navbar({ onContactClick }) {
                         whileHover={{ scale: 1.04 }}
                         whileTap={{ scale: 0.96 }}
                         style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', minWidth: 100 }}
+                        data-hover
                     >
                         <motion.div
                             animate={{
                                 boxShadow: [
-                                    '0 0 0 rgba(124,58,237,0.2)',
-                                    '0 0 24px rgba(124,58,237,0.45)',
-                                    '0 0 0 rgba(124,58,237,0.2)',
+                                    '0 0 0 rgba(218,229,245,0.18)',
+                                    '0 0 22px rgba(218,229,245,0.34)',
+                                    '0 0 0 rgba(218,229,245,0.18)',
                                 ],
                             }}
                             transition={{ duration: 3.8, ease: 'easeInOut', repeat: Infinity }}
@@ -101,18 +102,18 @@ export default function Navbar({ onContactClick }) {
                                 placeItems: 'center',
                                 fontSize: 13,
                                 fontWeight: 800,
-                                color: '#fff',
-                                background: 'linear-gradient(145deg, #c084fc, #7c3aed 58%, #5b21b6)',
+                                color: '#0b1015',
+                                background: 'linear-gradient(145deg, rgba(255,255,255,0.96), rgba(216,227,243,0.9) 55%, rgba(156,176,204,0.86))',
                             }}
                         >
                             T
                         </motion.div>
-                        <span style={{ color: '#f4ecff', fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 700, fontFamily: 'var(--font-display)' }}>
+                        <span style={{ color: 'rgba(245,247,251,0.94)', fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 700, fontFamily: 'var(--font-display)' }}>
                             Tejas
                         </span>
                     </motion.a>
 
-                    <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 4, borderRadius: 999, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.2)' }}>
+                    <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 4, borderRadius: 999, border: '1px solid rgba(255,255,255,0.1)', background: 'linear-gradient(140deg, rgba(255,255,255,0.08), rgba(15,20,28,0.42))' }}>
                         {NAV_LINKS.map((item) => {
                             const isActive = active === item.id
                             return (
@@ -120,11 +121,12 @@ export default function Navbar({ onContactClick }) {
                                     key={item.id}
                                     href={item.href}
                                     whileHover={{ y: -1 }}
+                                    data-hover
                                     style={{
                                         position: 'relative',
                                         padding: '7px 15px',
                                         borderRadius: 999,
-                                        color: isActive ? '#ffffff' : 'rgba(209, 197, 242, 0.78)',
+                                        color: isActive ? '#ffffff' : 'rgba(210, 220, 235, 0.72)',
                                         fontSize: 12,
                                         letterSpacing: '0.08em',
                                         textTransform: 'uppercase',
@@ -141,8 +143,8 @@ export default function Navbar({ onContactClick }) {
                                                 position: 'absolute',
                                                 inset: 0,
                                                 borderRadius: 999,
-                                                background: 'linear-gradient(120deg, rgba(196,132,252,0.35), rgba(124,58,237,0.25))',
-                                                border: '1px solid rgba(196,132,252,0.35)',
+                                                background: 'linear-gradient(125deg, rgba(255,255,255,0.18), rgba(178,197,222,0.18) 54%, rgba(90,106,129,0.16))',
+                                                border: '1px solid rgba(255,255,255,0.18)',
                                                 zIndex: 0,
                                             }}
                                         />
@@ -158,8 +160,9 @@ export default function Navbar({ onContactClick }) {
                         whileHover={{ y: -2, scale: 1.02 }}
                         whileTap={{ scale: 0.96 }}
                         className="nav-cta"
+                        data-hover
                         style={{
-                            border: 'none',
+                            border: '1px solid rgba(255,255,255,0.16)',
                             borderRadius: 999,
                             padding: '9px 17px',
                             fontSize: 12,
@@ -167,10 +170,10 @@ export default function Navbar({ onContactClick }) {
                             textTransform: 'uppercase',
                             fontWeight: 700,
                             fontFamily: 'var(--font-mono)',
-                            color: '#fff',
+                            color: '#091018',
                             cursor: 'pointer',
-                            background: 'linear-gradient(135deg, #8b5cf6, #7c3aed 55%, #4f46e5)',
-                            boxShadow: '0 10px 24px rgba(124,58,237,0.45), inset 0 1px 0 rgba(255,255,255,0.28)',
+                            background: 'linear-gradient(135deg, rgba(255,255,255,0.96), rgba(214,225,242,0.88) 55%, rgba(150,170,196,0.88))',
+                            boxShadow: '0 12px 26px rgba(179,199,228,0.18), inset 0 1px 0 rgba(255,255,255,0.96)',
                         }}
                     >
                         Contact

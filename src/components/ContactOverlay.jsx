@@ -48,14 +48,14 @@ export default function ContactOverlay({ isOpen, onClose }) {
     const inputStyle = {
         width: '100%',
         padding: '12px 16px',
-        borderRadius: 12,
+        borderRadius: 14,
         fontSize: 14,
         outline: 'none',
-        background: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'linear-gradient(145deg, rgba(255,255,255,0.08), rgba(14,20,28,0.38))',
+        border: '1px solid rgba(255,255,255,0.12)',
         color: 'var(--text-primary)',
         fontFamily: 'var(--font-body)',
-        transition: 'border-color 0.3s',
+        transition: 'border-color 0.3s, box-shadow 0.3s',
     }
 
     return (
@@ -72,7 +72,7 @@ export default function ContactOverlay({ isOpen, onClose }) {
                 >
                     {/* Backdrop */}
                     <motion.div
-                        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
+                        style={{ position: 'absolute', inset: 0, background: 'rgba(5,8,14,0.52)', backdropFilter: 'blur(10px) saturate(120%)' }}
                         onClick={onClose}
                     />
 
@@ -88,9 +88,9 @@ export default function ContactOverlay({ isOpen, onClose }) {
                             maxWidth: 480,
                             height: '100%',
                             overflowY: 'auto',
-                            background: 'rgba(10,10,18,0.95)',
-                            borderLeft: '1px solid rgba(255,255,255,0.06)',
-                            backdropFilter: 'blur(20px)',
+                            background: 'linear-gradient(160deg, rgba(255,255,255,0.16), rgba(18,24,33,0.72) 34%, rgba(10,14,20,0.88) 100%)',
+                            borderLeft: '1px solid rgba(255,255,255,0.12)',
+                            backdropFilter: 'blur(28px) saturate(170%)',
                         }}
                     >
                         <div style={{ padding: '40px 40px' }}>
@@ -105,20 +105,21 @@ export default function ContactOverlay({ isOpen, onClose }) {
                                     width: 40, height: 40, borderRadius: '50%',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                     fontSize: 16, cursor: 'pointer',
-                                    background: 'rgba(255,255,255,0.04)',
-                                    border: '1px solid rgba(255,255,255,0.08)',
-                                    color: 'var(--text-secondary)',
-                                    backdropFilter: 'blur(12px)',
+                                    background: 'linear-gradient(145deg, rgba(255,255,255,0.12), rgba(18,24,33,0.34))',
+                                    border: '1px solid rgba(255,255,255,0.12)',
+                                    color: 'rgba(229,236,247,0.84)',
+                                    backdropFilter: 'blur(18px)',
                                 }}
+                                data-hover
                             >
                                 ✕
                             </motion.button>
 
-                            <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 16, color: 'var(--accent-light)', fontFamily: 'var(--font-mono)' }}>
+                            <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 16, color: 'rgba(218, 228, 243, 0.72)', fontFamily: 'var(--font-mono)' }}>
                                 Contact
                             </p>
                             <h2 style={{ fontSize: 'clamp(1.6rem, 4vw, 2.2rem)', fontWeight: 700, marginBottom: 10 }}>
-                                Let's <span className="gradient-text">connect</span>.
+                                Let's <span className="gradient-text" data-text="connect">connect</span>.
                             </h2>
                             <p style={{ fontSize: 14, marginBottom: 40, color: 'var(--text-secondary)' }}>
                                 Have a project in mind, or just want to say hello? I'd love to hear from you.
@@ -161,8 +162,14 @@ export default function ContactOverlay({ isOpen, onClose }) {
                                                 placeholder={field.placeholder}
                                                 required
                                                 style={inputStyle}
-                                                onFocus={(e) => (e.target.style.borderColor = 'var(--accent)')}
-                                                onBlur={(e) => (e.target.style.borderColor = 'rgba(255,255,255,0.08)')}
+                                                onFocus={(e) => {
+                                                    e.target.style.borderColor = 'rgba(255,255,255,0.24)'
+                                                    e.target.style.boxShadow = '0 0 0 4px rgba(220,232,250,0.08)'
+                                                }}
+                                                onBlur={(e) => {
+                                                    e.target.style.borderColor = 'rgba(255,255,255,0.12)'
+                                                    e.target.style.boxShadow = 'none'
+                                                }}
                                             />
                                         </motion.div>
                                     ))}
@@ -180,8 +187,14 @@ export default function ContactOverlay({ isOpen, onClose }) {
                                             required
                                             rows={5}
                                             style={{ ...inputStyle, resize: 'none' }}
-                                            onFocus={(e) => (e.target.style.borderColor = 'var(--accent)')}
-                                            onBlur={(e) => (e.target.style.borderColor = 'rgba(255,255,255,0.08)')}
+                                            onFocus={(e) => {
+                                                e.target.style.borderColor = 'rgba(255,255,255,0.24)'
+                                                e.target.style.boxShadow = '0 0 0 4px rgba(220,232,250,0.08)'
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.borderColor = 'rgba(255,255,255,0.12)'
+                                                e.target.style.boxShadow = 'none'
+                                            }}
                                         />
                                     </motion.div>
 
@@ -190,19 +203,20 @@ export default function ContactOverlay({ isOpen, onClose }) {
                                         type="submit"
                                         variants={fieldVariants}
                                         transition={{ type: 'spring', stiffness: 150, damping: 18 }}
-                                        whileHover={{ y: -2, boxShadow: '0 0 40px rgba(6,182,212,0.5)' }}
+                                        whileHover={{ y: -2, boxShadow: '0 18px 36px rgba(209,223,245,0.22)' }}
                                         whileTap={{ scale: 0.98 }}
+                                        data-hover
                                         style={{
                                             width: '100%',
                                             padding: '14px 0',
-                                            borderRadius: 12,
+                                            borderRadius: 14,
                                             fontSize: 14,
                                             fontWeight: 600,
                                             cursor: 'pointer',
-                                            background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
-                                            color: '#fff',
-                                            border: 'none',
-                                            boxShadow: '0 0 25px rgba(6,182,212,0.3)',
+                                            background: 'linear-gradient(135deg, rgba(255,255,255,0.96), rgba(214,225,242,0.88) 58%, rgba(146,166,192,0.88))',
+                                            color: '#0b1015',
+                                            border: '1px solid rgba(255,255,255,0.18)',
+                                            boxShadow: '0 12px 30px rgba(209,223,245,0.18)',
                                         }}
                                     >
                                         Send Message →

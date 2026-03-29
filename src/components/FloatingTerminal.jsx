@@ -2,16 +2,16 @@ import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
 const SNIPPETS = [
-    'model.fit(X_train, y_train)',
-    '>>> accuracy: 98.7%',
-    'import torch.nn as nn',
-    'loss.backward()',
-    'pred = model.predict(X)',
-    'optimizer.step()',
-    'epochs: 100 ✓',
-    'np.mean(features)',
-    'pipeline.transform(df)',
-    'f1_score: 0.96',
+    'project.status = shipping',
+    'latency.avg = 12.4ms',
+    'model.confidence = 99.1%',
+    'prototype.time_to_demo = 4d',
+    'dataset.health = stable',
+    'team.mode = iterate_fast',
+    'feedback.loop = active',
+    'systems.thinking = enabled',
+    'availability = open',
+    'next_up = multimodal_experiments',
 ]
 
 export default function FloatingTerminal() {
@@ -76,12 +76,12 @@ export default function FloatingTerminal() {
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                 className="breathe-glow"
                 style={{
-                    background: 'rgba(3, 0, 20, 0.85)',
-                    backdropFilter: 'blur(16px)',
-                    border: '1px solid rgba(124, 58, 237, 0.2)',
-                    borderRadius: 12,
+                    background: 'linear-gradient(155deg, rgba(255,255,255,0.14), rgba(16,22,30,0.74) 36%, rgba(10,14,20,0.78) 100%)',
+                    backdropFilter: 'blur(22px) saturate(160%)',
+                    border: '1px solid rgba(255,255,255,0.14)',
+                    borderRadius: 16,
                     overflow: 'hidden',
-                    boxShadow: '0 0 30px rgba(124, 58, 237, 0.08), 0 8px 32px rgba(0,0,0,0.4)',
+                    boxShadow: '0 28px 50px rgba(4,7,12,0.32), inset 0 1px 0 rgba(255,255,255,0.2)',
                 }}
             >
                 {/* Title bar */}
@@ -90,8 +90,8 @@ export default function FloatingTerminal() {
                     alignItems: 'center',
                     gap: 6,
                     padding: '8px 12px',
-                    borderBottom: '1px solid rgba(255,255,255,0.06)',
-                    background: 'rgba(255,255,255,0.02)',
+                    borderBottom: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(255,255,255,0.05)',
                 }}>
                     <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#ef4444' }} />
                     <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#f59e0b' }} />
@@ -100,11 +100,11 @@ export default function FloatingTerminal() {
                         marginLeft: 8,
                         fontSize: 10,
                         fontWeight: 500,
-                        color: 'rgba(124, 58, 237, 0.6)',
+                        color: 'rgba(214, 224, 240, 0.62)',
                         fontFamily: 'var(--font-mono)',
                         letterSpacing: '0.05em',
                     }}>
-                        ai_pipeline.py
+                        tejas.console
                     </span>
                 </div>
 
@@ -118,20 +118,20 @@ export default function FloatingTerminal() {
                 }}>
                     {/* History lines */}
                     {history.map((line, i) => (
-                        <div key={i} style={{ color: 'rgba(167, 139, 250, 0.35)' }}>
-                            <span style={{ color: 'rgba(124, 58, 237, 0.4)', marginRight: 6 }}>›</span>
+                        <div key={i} style={{ color: 'rgba(195, 209, 229, 0.38)' }}>
+                            <span style={{ color: 'rgba(149, 171, 200, 0.42)', marginRight: 6 }}>›</span>
                             {line}
                         </div>
                     ))}
                     {/* Current typing line */}
-                    <div style={{ color: '#c084fc' }}>
-                        <span style={{ color: '#7c3aed', marginRight: 6 }}>›</span>
+                    <div style={{ color: 'rgba(235, 242, 252, 0.96)' }}>
+                        <span style={{ color: 'rgba(183, 202, 228, 0.78)', marginRight: 6 }}>›</span>
                         {currentLine}
                         <span style={{
                             display: 'inline-block',
                             width: 6,
                             height: 13,
-                            background: showCursor ? '#a78bfa' : 'transparent',
+                            background: showCursor ? '#edf5ff' : 'transparent',
                             marginLeft: 1,
                             verticalAlign: 'middle',
                             transition: 'background 0.1s',
